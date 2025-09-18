@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTI Dashboard - Renault Sustentabilidade Digital</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="renault-logo">RENAULT</div>
+                    <h1>EcoTI Dashboard - Sustentabilidade Digital</h1>
+                </div>
+                <div class="current-time" id="currentTime"></div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard Principal</button>
+            <button class="tab-btn" data-tab="monitoring">Monitoramento</button>
+            <button class="tab-btn" data-tab="analytics">Análise Preditiva</button>
+            <button class="tab-btn" data-tab="settings">Configurações</button>
+        </nav>
+
+        <!-- Dashboard Principal Tab -->
+        <div class="tab-content active" id="dashboard-tab">
+            <!-- Metrics Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card energy-card">
+                    <div class="metric-icon">⚡</div>
+                    <div class="metric-content">
+                        <h3>Consumo Atual</h3>
+                        <div class="metric-value" id="currentConsumption">1.344 kWh</div>
+                        <div class="metric-trend positive">-12% vs ontem</div>
+                    </div>
+                </div>
+
+                <div class="metric-card co2-card">
+                    <div class="metric-icon">🌍</div>
+                    <div class="metric-content">
+                        <h3>Emissões CO₂/ano</h3>
+                        <div class="metric-value" id="co2Emissions">219.610 kg</div>
+                        <div class="metric-trend positive">-8% vs meta</div>
+                    </div>
+                </div>
+
+                <div class="metric-card savings-card">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-content">
+                        <h3>Economia Potencial</h3>
+                        <div class="metric-value" id="potentialSavings">R$ 1.612.800</div>
+                        <div class="metric-trend neutral">Por ano</div>
+                    </div>
+                </div>
+
+                <div class="metric-card trees-card">
+                    <div class="metric-icon">🌳</div>
+                    <div class="metric-content">
+                        <h3>Equivalente em Árvores</h3>
+                        <div class="metric-value" id="treeEquivalent">9.982</div>
+                        <div class="metric-trend neutral">Árvores plantadas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Chart -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2>Consumo Energético em Tempo Real</h2>
+                    <div class="chart-controls">
+                        <select id="chartPeriod">
+                            <option value="24h">Últimas 24h</option>
+                            <option value="7d">Últimos 7 dias</option>
+                            <option value="30d">Últimos 30 dias</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-container" style="position: relative; height: 300px;">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Workstation Status -->
+            <div class="status-section">
+                <div class="status-header">
+                    <h2>Status das Workstations</h2>
+                    <div class="status-summary">
+                        <span class="status-item online">
+                            <span class="status-dot"></span>
+                            <span>4.200 Online</span>
+                        </span>
+                        <span class="status-item offline">
+                            <span class="status-dot"></span>
+                            <span>1.176 Offline</span>
+                        </span>
+                        <span class="status-item eco">
+                            <span class="status-dot"></span>
+                            <span>Modo Eco Ativo</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="status-grid">
+                    <div class="sector-status" data-sector="administrativo">
+                        <h4>Administrativo</h4>
+                        <div class="status-bar">
+                            <div class="status-fill" style="width: 75%"></div>
+                        </div>
+                        <div class="status-details">900/1200 ativas</div>
+                    </div>
+                    <div class="sector-status" data-sector="engenharia">
+                        <h4>Engenharia</h4>
+                        <div class="status-bar">
+                            <div class="status-fill" style="width: 85%"></div>
+                        </div>
+                        <div class="status-details">680/800 ativas</div>
+                    </div>
+                    <div class="sector-status" data-sector="producao">
+                        <h4>Produção</h4>
+                        <div class="status-bar">
+                            <div class="status-fill" style="width: 90%"></div>
+                        </div>
+                        <div class="status-details">1350/1500 ativas</div>
+                    </div>
+                    <div class="sector-status" data-sector="vendas">
+                        <h4>Vendas</h4>
+                        <div class="status-bar">
+                            <div class="status-fill" style="width: 80%"></div>
+                        </div>
+                        <div class="status-details">720/900 ativas</div>
+                    </div>
+                    <div class="sector-status" data-sector="suporte">
+                        <h4>Suporte</h4>
+                        <div class="status-bar">
+                            <div class="status-fill" style="width: 55%"></div>
+                        </div>
+                        <div class="status-details">550/976 ativas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monitoramento Tab -->
+        <div class="tab-content" id="monitoring-tab">
+            <div class="monitoring-header">
+                <h2>Monitoramento de Infraestrutura</h2>
+                <div class="monitoring-actions">
+                    <button class="btn btn--primary" id="refreshData">🔄 Atualizar</button>
+                    <button class="btn btn--outline" id="exportData">📊 Exportar</button>
+                </div>
+            </div>
+
+            <div class="monitoring-grid">
+                <div class="monitoring-card">
+                    <h3>Servidores</h3>
+                    <div class="server-list">
+                        <div class="server-item active">
+                            <span class="server-name">HP DL380 - Cluster 1</span>
+                            <span class="server-status">85/90 ativos</span>
+                            <span class="server-consumption">320 kWh</span>
+                        </div>
+                        <div class="server-item active">
+                            <span class="server-name">VxRail - Hyper-V</span>
+                            <span class="server-status">10/10 ativos</span>
+                            <span class="server-consumption">180 kWh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="monitoring-card">
+                    <h3>Consumo por Setor</h3>
+                    <div class="chart-container" style="position: relative; height: 250px;">
+                        <canvas id="sectorChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alerts-section">
+                <h3>Alertas de Desperdício</h3>
+                <div class="alerts-list">
+                    <div class="alert-item warning">
+                        <div class="alert-icon">⚠️</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Workstations ociosas detectadas</div>
+                            <div class="alert-description">23 máquinas no setor Administrativo sem atividade há mais de 2h</div>
+                        </div>
+                        <button class="btn btn--sm btn--primary">Implementar Economia</button>
+                    </div>
+                    <div class="alert-item info">
+                        <div class="alert-icon">💡</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Oportunidade de otimização</div>
+                            <div class="alert-description">Migração de VMs para horário noturno pode economizar 300 kWh/dia</div>
+                        </div>
+                        <button class="btn btn--sm btn--outline">Ver Detalhes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Análise Preditiva Tab -->
+        <div class="tab-content" id="analytics-tab">
+            <div class="analytics-header">
+                <h2>Análise Preditiva e Recomendações</h2>
+            </div>
+
+            <div class="prediction-section">
+                <h3>Previsão de Consumo - Próximos 7 dias</h3>
+                <div class="chart-container" style="position: relative; height: 300px;">
+                    <canvas id="predictionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="recommendations-section">
+                <h3>Recomendações de Otimização</h3>
+                <div class="recommendations-grid">
+                    <div class="recommendation-card auto">
+                        <div class="recommendation-header">
+                            <span class="recommendation-type">Automática</span>
+                            <span class="recommendation-status implementable">Implementável</span>
+                        </div>
+                        <h4>Desligar workstations ociosas após 30min</h4>
+                        <div class="recommendation-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Economia:</span>
+                                <span class="metric-value">450 kWh/dia</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Valor:</span>
+                                <span class="metric-value">R$ 270/dia</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">CO₂:</span>
+                                <span class="metric-value">-37 kg/dia</span>
+                            </div>
+                        </div>
+                        <button class="btn btn--primary btn--full-width">Implementar Agora</button>
+                    </div>
+
+                    <div class="recommendation-card manual">
+                        <div class="recommendation-header">
+                            <span class="recommendation-type">Manual</span>
+                            <span class="recommendation-status analysis">Em Análise</span>
+                        </div>
+                        <h4>Migrar 20% das VMs para horário noturno</h4>
+                        <div class="recommendation-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Economia:</span>
+                                <span class="metric-value">300 kWh/dia</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Valor:</span>
+                                <span class="metric-value">R$ 180/dia</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">CO₂:</span>
+                                <span class="metric-value">-24 kg/dia</span>
+                            </div>
+                        </div>
+                        <button class="btn btn--outline btn--full-width">Analisar Impacto</button>
+                    </div>
+
+                    <div class="recommendation-card auto">
+                        <div class="recommendation-header">
+                            <span class="recommendation-type">Automática</span>
+                            <span class="recommendation-status available">Disponível</span>
+                        </div>
+                        <h4>Otimizar refrigeração dos servidores</h4>
+                        <div class="recommendation-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Economia:</span>
+                                <span class="metric-value">200 kWh/dia</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Valor:</span>
+                                <span class="metric-value">R$ 120/dia</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">CO₂:</span>
+                                <span class="metric-value">-16 kg/dia</span>
+                            </div>
+                        </div>
+                        <button class="btn btn--primary btn--full-width">Ativar Otimização</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configurações Tab -->
+        <div class="tab-content" id="settings-tab">
+            <div class="settings-header">
+                <h2>Configurações do Sistema</h2>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>Horários de Economia</h3>
+                    <div class="form-group">
+                        <label class="form-label">Início do modo economia</label>
+                        <input type="time" class="form-control" value="19:00">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fim do modo economia</label>
+                        <input type="time" class="form-control" value="07:00">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Timeout para ociosidade</label>
+                        <select class="form-control">
+                            <option value="15">15 minutos</option>
+                            <option value="30" selected>30 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="120">2 horas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Alertas e Notificações</h3>
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            Alertas de desperdício energético
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            Relatórios semanais de economia
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Notificações push no celular
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Metas de Sustentabilidade</h3>
+                    <div class="form-group">
+                        <label class="form-label">Meta de redução CO₂ (% ano)</label>
+                        <input type="number" class="form-control" value="15" min="1" max="50">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Meta de economia energética (% mês)</label>
+                        <input type="number" class="form-control" value="8" min="1" max="30">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Orçamento máximo anual (R$)</label>
+                        <input type="number" class="form-control" value="2000000" min="100000">
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Acesso Remoto</h3>
+                    <div class="form-group">
+                        <label class="form-label">Sistema de acesso preferido</label>
+                        <select class="form-control">
+                            <option value="anydesk">AnyDesk</option>
+                            <option value="teamviewer">TeamViewer</option>
+                            <option value="rdp">Remote Desktop</option>
+                            <option value="vnc">VNC</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn--primary">Testar Conexão</button>
+                        <button class="btn btn--outline">Configurar Acesso</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-actions">
+                <button class="btn btn--primary">Salvar Configurações</button>
+                <button class="btn btn--outline">Restaurar Padrões</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
