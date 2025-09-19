@@ -1,0 +1,141 @@
+name: 🧪 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  FLASK_ENV: testing
+  FLASK_DEBUG: 0
+
+jobs:
+  test:
+    name: 🐍 Test Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
+        
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: 📦 Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: 🔧 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+        
+    - name: 🎯 Lint with flake8
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings. GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        
+    - name: 🎨 Check code formatting with black
+      run: |
+        black --check --diff .
+        
+    - name: 🧪 Test with pytest
+      run: |
+        pytest tests/ -v --cov=. --cov-report=xml --cov-report=term-missing
+        
+    - name: 🚀 Test Flask Application Startup
+      run: |
+        python -c "
+        import sys
+        import os
+        sys.path.insert(0, os.getcwd())
+        
+        try:
+            from app_renault_mvp import app, infra
+            print('✅ Flask app imported successfully')
+            
+            # Test infrastructure calculations
+            consumption = infra.calcular_consumo_atual()
+            emissions = infra.calcular_emissoes_anuais()
+            trees = infra.calcular_arvores_equivalentes()
+            savings = infra.calcular_economia_potencial()
+            
+            print(f'✅ Infrastructure calculations working:')
+            print(f'   Consumption: {consumption:.2f} kWh')
+            print(f'   Emissions: {emissions:.0f} kg/year')
+            print(f'   Trees: {trees:,}')
+            print(f'   Savings: R$ {savings:,.2f}')
+            
+            # Test Flask test client
+            with app.test_client() as client:
+                response = client.get('/api/metrics')
+                assert response.status_code == 200
+                data = response.get_json()
+                assert 'consumo_atual' in data
+                assert 'emissoes_co2' in data
+                assert 'economia_potencial' in data
+                assert 'arvores_equivalentes' in data
+                print('✅ API endpoint test passed')
+                
+                response = client.get('/')
+                assert response.status_code == 200
+                print('✅ Dashboard template test passed')
+                
+            print('🎉 All Flask application tests passed!')
+            
+        except Exception as e:
+            print(f'❌ Flask application test failed: {e}')
+            sys.exit(1)
+        "
+        
+    - name: 📊 Upload coverage to Codecov
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  build-matrix-summary:
+    name: 📋 Build Matrix Summary
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 📊 Check Matrix Results
+      run: |
+        echo "### 🧪 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|-----------|---------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 🐍 Python Matrix Tests | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🎯 Code Quality | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🚀 Flask Application | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📊 API Endpoints | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**EcoTI Dashboard** - Renault Transformation Day 2025 🌱" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ needs.test.result }}" != "success" ]; then
+          echo "❌ CI/CD Pipeline failed. Please check the logs above."
+          exit 1
+        else
+          echo "✅ CI/CD Pipeline completed successfully!"
+        fi

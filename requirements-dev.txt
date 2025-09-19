@@ -6,6 +6,7 @@ pytest>=7.0.0
 pytest-cov>=4.0.0
 pytest-mock>=3.0.0
 pytest-asyncio>=0.21.0
+pytest-flask>=1.3.0        # Flask-specific testing utilities
 
 # Code Quality
 black>=23.0.0           # Code formatter
@@ -13,10 +14,14 @@ flake8>=6.0.0          # Linting
 mypy>=1.0.0            # Type checking
 isort>=5.12.0          # Import sorting
 
+# Security Analysis
+bandit[toml]>=1.7.0    # Security linting with TOML support
+safety>=2.3.0          # Dependency vulnerability scanner
+pip-audit>=2.6.0       # Additional dependency auditing
+
 # Development Tools
 pre-commit>=3.0.0      # Git hooks
-bandit>=1.7.0          # Security linting
-safety>=2.3.0          # Dependency vulnerability scanner
+coverage>=7.3.0        # Test coverage reporting
 
 # Documentation
 sphinx>=6.0.0          # Documentation generator
@@ -34,3 +39,4 @@ ipdb>=0.13.0           # Enhanced debugger
 requests-mock>=1.10.0  # HTTP request mocking
 freezegun>=1.2.0       # Time mocking for tests
 factory-boy>=3.2.0     # Test data generation
+responses>=0.24.0      # HTTP response mocking

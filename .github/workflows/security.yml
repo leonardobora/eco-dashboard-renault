@@ -1,0 +1,156 @@
+name: 🔒 Security Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  codeql:
+    name: 🔍 CodeQL Analysis
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python', 'javascript' ]
+        
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔍 Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        queries: +security-and-quality
+        
+    - name: 🏗️ Autobuild
+      uses: github/codeql-action/autobuild@v2
+      
+    - name: 🔎 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{matrix.language}}"
+
+  python-security:
+    name: 🐍 Python Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit[toml] safety pip-audit
+        pip install -r requirements.txt
+        
+    - name: 🛡️ Run Bandit Security Scan
+      run: |
+        bandit -r . -f json -o bandit-report.json || true
+        bandit -r . -f txt
+        
+    - name: 🔒 Check Dependencies with Safety
+      run: |
+        safety check --json --output safety-report.json || true
+        safety check
+        
+    - name: 🔍 Audit Dependencies with pip-audit
+      run: |
+        pip-audit --desc --format=json --output=pip-audit-report.json || true
+        pip-audit --desc
+        
+    - name: 📊 Upload Security Reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+          pip-audit-report.json
+        retention-days: 30
+
+  dependency-review:
+    name: 🔍 Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔍 Dependency Review
+      uses: actions/dependency-review-action@v3
+      with:
+        fail-on-severity: moderate
+        comment-summary-in-pr: true
+
+  secrets-scan:
+    name: 🔐 Secrets Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 🔐 Run TruffleHog OSS
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: main
+        head: HEAD
+        extra_args: --debug --only-verified
+
+  security-summary:
+    name: 📋 Security Summary
+    needs: [codeql, python-security, secrets-scan]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 📊 Generate Security Summary
+      run: |
+        echo "### 🔒 Security Analysis Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Security Check | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|----------------|---------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔍 CodeQL Analysis | ${{ needs.codeql.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🐍 Python Security (Bandit) | ${{ needs.python-security.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔒 Dependency Safety | ${{ needs.python-security.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔐 Secrets Detection | ${{ needs.secrets-scan.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**EcoTI Dashboard Security** - Enterprise Grade Protection 🛡️" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Count failures
+        FAILURES=0
+        [ "${{ needs.codeql.result }}" != "success" ] && FAILURES=$((FAILURES + 1))
+        [ "${{ needs.python-security.result }}" != "success" ] && FAILURES=$((FAILURES + 1))
+        [ "${{ needs.secrets-scan.result }}" != "success" ] && FAILURES=$((FAILURES + 1))
+        
+        if [ $FAILURES -gt 0 ]; then
+          echo "⚠️ $FAILURES security check(s) require attention." >> $GITHUB_STEP_SUMMARY
+          echo "Please review the security reports and address any findings." >> $GITHUB_STEP_SUMMARY
+        else
+          echo "✅ All security checks passed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "Your EcoTI Dashboard meets enterprise security standards." >> $GITHUB_STEP_SUMMARY
+        fi
