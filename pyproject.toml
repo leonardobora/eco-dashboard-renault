@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+
+[project]
+name = "eco-dashboard-renault"
+description = "EcoTI Dashboard - Renault Digital Sustainability Platform"
+version = "1.0.0"
+authors = [
+    {name = "Renault EcoTI Team", email = "ecoti@renault.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["sustainability", "dashboard", "renault", "eco", "flask"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Information Analysis"
+]
+
+dependencies = [
+    "flask==2.3.3"
+]
+
+[project.optional-dependencies]
+dev = [
+    "bandit[toml]",
+    "safety",
+    "pip-audit"
+]
+
+[tool.bandit]
+exclude_dirs = [".venv", "venv", "env", "__pycache__", ".git", "node_modules"]
+skips = ["B101", "B601", "B603"]
+
+[tool.bandit.assert_used]
+skips = ["*test*.py", "*_test.py"]

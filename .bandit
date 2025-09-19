@@ -1,0 +1,22 @@
+[bandit]
+# Bandit configuration for EcoTI Dashboard security scanning
+
+# Exclude test files and generated code
+exclude_dirs = ['.venv', 'venv', 'env', '__pycache__', '.git', 'node_modules']
+
+# Skip specific tests that are not relevant for our Flask application
+skips = ['B101', 'B601', 'B603']
+
+# B101: assert_used - We don't use asserts in production code
+# B601: paramiko_calls - We don't use paramiko
+# B603: subprocess_without_shell_equals_true - We don't use subprocess
+
+# Set confidence levels for reporting
+confidence = ['HIGH', 'MEDIUM']
+
+# Set severity levels for reporting  
+severity = ['HIGH', 'MEDIUM']
+
+[formatters]
+# Use JSON format for CI/CD integration
+json = bandit.formatters.json:JsonFormatter

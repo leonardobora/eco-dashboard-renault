@@ -255,3 +255,10 @@ demo_images/
 
 # Chart exports
 chart_exports/
+
+# Security scan reports
+bandit-report.json
+safety-report.json
+pip-audit-report.json
+security-reports/
+*.sarif
