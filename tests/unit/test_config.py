@@ -228,6 +228,7 @@ class TestConfigurationIntegration(unittest.TestCase):
             config = AppConfig(
                 environment=Environment.TESTING,
                 data_source_type=DataSourceType.SYNTHETIC,
+                debug=False,
                 environmental=EnvironmentalFactors(
                     emission_factor_kg_co2_per_kwh=0.1,
                     tree_sequestration_kg_co2_per_year=25.0,
