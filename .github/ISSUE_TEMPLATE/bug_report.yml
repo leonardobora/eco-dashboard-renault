@@ -1,0 +1,106 @@
+name: 🐛 Bug Report
+description: Reportar um problema ou bug no EcoTI Dashboard
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+projects: ["leonardobora/1"]
+assignees:
+  - leonardobora
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar um bug! Isso nos ajuda a melhorar o EcoTI Dashboard.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: O que aconteceu?
+      description: Descreva o bug de forma clara e concisa
+      placeholder: Descreva o problema...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento Esperado
+      description: O que deveria ter acontecido?
+      placeholder: Descreva o comportamento esperado...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Passos para Reproduzir
+      description: Como reproduzir o problema?
+      placeholder: |
+        1. Acesse a URL...
+        2. Clique em...
+        3. Veja o erro...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Componente Afetado
+      description: Qual componente do sistema está afetado?
+      options:
+        - Dashboard Principal
+        - API /metrics
+        - Cálculos de Sustentabilidade
+        - Interface Gráfica
+        - CI/CD Pipeline
+        - Documentação
+        - Outro
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridade
+      description: Qual a prioridade deste bug?
+      options:
+        - 🔴 Alta - Bloqueia funcionalidade crítica
+        - 🟡 Média - Afeta experiência do usuário
+        - 🟢 Baixa - Problema cosmético
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Informações sobre o ambiente onde o bug ocorreu
+      placeholder: |
+        - OS: Windows/Linux/macOS
+        - Browser: Chrome/Firefox/Safari
+        - Python Version: 3.x
+        - Flask Version: 2.3.3
+    validations:
+      required: false
+
+  - type: textarea
+    id: sustainability-impact
+    attributes:
+      label: Impacto na Sustentabilidade
+      description: Este bug afeta os cálculos ou métricas de sustentabilidade?
+      placeholder: Descreva se há impacto nas métricas ambientais...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Confirme que você verificou os itens abaixo
+      options:
+        - label: Verifiquei se já existe uma issue similar
+          required: true
+        - label: Li a documentação relevante
+          required: true
+        - label: Este bug não contém informações sensíveis
+          required: true

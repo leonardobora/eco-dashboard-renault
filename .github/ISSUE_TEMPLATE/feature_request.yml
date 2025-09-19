@@ -1,0 +1,123 @@
+name: ✨ Feature Request
+description: Sugerir uma nova funcionalidade para o EcoTI Dashboard
+title: "[FEATURE] "
+labels: ["enhancement", "needs-discussion"]
+projects: ["leonardobora/1"]
+assignees:
+  - leonardobora
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por sugerir uma nova funcionalidade! Suas ideias nos ajudam a evoluir o EcoTI Dashboard.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema ou Necessidade
+      description: Que problema esta funcionalidade resolveria?
+      placeholder: Descreva o problema ou necessidade...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução Proposta
+      description: Como você imagina que esta funcionalidade deveria funcionar?
+      placeholder: Descreva sua solução ideal...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria da Funcionalidade
+      description: Qual área do sistema esta funcionalidade afetaria?
+      options:
+        - 🌱 Sustentabilidade - Novas métricas ambientais
+        - 📊 Dashboard - Interface e visualizações
+        - 🔌 API - Novos endpoints ou dados
+        - 🧪 ML/IA - Machine Learning e Inteligência Artificial
+        - 🔒 Segurança - Autenticação e autorização
+        - 📱 Mobile - Responsividade e mobile-first
+        - 🚀 Performance - Otimizações e velocidade
+        - 📚 Documentação - Guides e tutoriais
+        - 🔧 DevOps - CI/CD e automação
+        - 🎨 UX/UI - Experiência do usuário
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridade
+      description: Qual a importância desta funcionalidade?
+      options:
+        - 🔴 Alta - Essencial para o negócio
+        - 🟡 Média - Melhoraria significativamente
+        - 🟢 Baixa - Nice to have
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas Consideradas
+      description: Que outras soluções você considerou?
+      placeholder: Descreva alternativas que você pensou...
+    validations:
+      required: false
+
+  - type: textarea
+    id: sustainability-benefit
+    attributes:
+      label: Benefício para Sustentabilidade
+      description: Como esta funcionalidade contribuiria para os objetivos de sustentabilidade?
+      placeholder: |
+        - Redução de consumo energético
+        - Melhores métricas ambientais
+        - Otimização de recursos
+        - Conscientização ambiental
+    validations:
+      required: false
+
+  - type: textarea
+    id: business-value
+    attributes:
+      label: Valor para o Negócio
+      description: Qual o impacto desta funcionalidade para a Renault?
+      placeholder: |
+        - ROI esperado
+        - Usuários beneficiados
+        - Diferencial competitivo
+        - Alinhamento estratégico
+    validations:
+      required: false
+
+  - type: dropdown
+    id: effort
+    attributes:
+      label: Estimativa de Esforço
+      description: Como você avalia a complexidade de implementação?
+      options:
+        - 🟢 Pequeno - 1-2 dias
+        - 🟡 Médio - 1-2 semanas
+        - 🔴 Grande - 1+ mês
+        - 🤔 Não sei estimar
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Confirme que você verificou os itens abaixo
+      options:
+        - label: Verifiquei se já existe uma solicitação similar
+          required: true
+        - label: Esta funcionalidade está alinhada com os objetivos do projeto
+          required: true
+        - label: Considerei o impacto na sustentabilidade
+          required: true

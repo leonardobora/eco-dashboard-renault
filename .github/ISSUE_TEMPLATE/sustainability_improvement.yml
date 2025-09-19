@@ -1,0 +1,169 @@
+name: 🌱 Sustainability Improvement
+description: Propor melhorias específicas para sustentabilidade e impacto ambiental
+title: "[SUSTAINABILITY] "
+labels: ["sustainability", "eco-improvement", "priority-high"]
+projects: ["leonardobora/1"]
+assignees:
+  - leonardobora
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        🌍 **Obrigado por contribuir com melhorias de sustentabilidade!**
+        
+        Esta template é especificamente para sugestões que impactem positivamente o meio ambiente,
+        eficiência energética e objetivos ESG da Renault.
+
+  - type: dropdown
+    id: sustainability-area
+    attributes:
+      label: Área de Sustentabilidade
+      description: Qual aspecto da sustentabilidade esta melhoria aborda?
+      options:
+        - ⚡ Eficiência Energética - Redução de consumo
+        - 🌿 Emissões de CO2 - Cálculos e reduções
+        - 💚 Economia Circular - Reuso e reciclagem
+        - 📊 Métricas ESG - Reporting e compliance
+        - 🔋 Infraestrutura Verde - Hardware e datacenter
+        - 📱 Green IT - Práticas de desenvolvimento sustentável
+        - 🌳 Carbon Footprint - Pegada de carbono
+        - 💰 Green Economics - ROI ambiental
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-impact
+    attributes:
+      label: Situação Atual
+      description: Qual o impacto ambiental atual que precisa ser melhorado?
+      placeholder: |
+        - Consumo energético atual: X kWh
+        - Emissões CO2: X kg/ano
+        - Recursos desperdiçados: X
+        - Ineficiências identificadas: X
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-improvement
+    attributes:
+      label: Melhoria Proposta
+      description: Descreva detalhadamente a melhoria de sustentabilidade
+      placeholder: |
+        - Solução proposta
+        - Tecnologias envolvidas
+        - Mudanças necessárias
+        - Implementação sugerida
+    validations:
+      required: true
+
+  - type: textarea
+    id: environmental-benefit
+    attributes:
+      label: Benefícios Ambientais Esperados
+      description: Quantifique os benefícios ambientais desta melhoria
+      placeholder: |
+        - Redução energética: X% ou X kWh
+        - Redução CO2: X kg/ano
+        - Economia de recursos: X
+        - Equivalência em árvores: X árvores plantadas
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact-scale
+    attributes:
+      label: Escala de Impacto
+      description: Qual o tamanho do impacto ambiental esperado?
+      options:
+        - 🌟 Transformacional - Mudança significativa nos KPIs
+        - 🚀 Alto - Impacto mensurável nos objetivos
+        - 📈 Médio - Melhoria moderada mas importante
+        - 🌱 Incremental - Pequena melhoria contínua
+    validations:
+      required: true
+
+  - type: textarea
+    id: business-case
+    attributes:
+      label: Business Case
+      description: Qual o retorno para a Renault além do benefício ambiental?
+      placeholder: |
+        - ROI financeiro: R$ X em Y anos
+        - Redução de custos: R$ X/ano
+        - Compliance regulatório
+        - Vantagem competitiva
+        - Branding sustentável
+    validations:
+      required: true
+
+  - type: dropdown
+    id: implementation-complexity
+    attributes:
+      label: Complexidade de Implementação
+      description: Qual o nível de dificuldade para implementar?
+      options:
+        - 🟢 Simples - Configuração ou ajuste
+        - 🟡 Moderado - Desenvolvimento focused
+        - 🔴 Complexo - Mudanças arquiteturais
+        - 🎯 Estratégico - Requer decisão executiva
+    validations:
+      required: true
+
+  - type: textarea
+    id: measurement
+    attributes:
+      label: Como Medir o Sucesso
+      description: Como vamos medir se a melhoria foi bem-sucedida?
+      placeholder: |
+        - KPIs específicos
+        - Métricas antes/depois
+        - Ferramentas de monitoramento
+        - Frequência de medição
+        - Metas numéricas
+    validations:
+      required: true
+
+  - type: dropdown
+    id: alignment
+    attributes:
+      label: Alinhamento com Objetivos Renault
+      description: Como esta melhoria se alinha com a estratégia de sustentabilidade da Renault?
+      options:
+        - 🎯 Totalmente alinhado - Core business sustainability
+        - ✅ Bem alinhado - Contribui para objetivos principais
+        - 📊 Parcialmente alinhado - Benefício indireto
+        - 🤔 Precisa validação - Requer análise estratégica
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Referências e Benchmarks
+      description: Exemplos de implementações similares ou estudos relevantes
+      placeholder: |
+        - Cases de sucesso na indústria
+        - Estudos acadêmicos
+        - Benchmarks do setor automotivo
+        - Certificações ambientais
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: sustainability-checklist
+    attributes:
+      label: Checklist de Sustentabilidade
+      description: Confirme os aspectos ambientais considerados
+      options:
+        - label: Analisei o ciclo de vida completo da solução
+          required: true
+        - label: Considerei possíveis impactos negativos indiretos
+          required: true
+        - label: Esta melhoria está alinhada com práticas ESG
+          required: true
+        - label: Os benefícios são mensuráveis e verificáveis
+          required: true
+        - label: Considerei a sustentabilidade a longo prazo da solução
+          required: true
