@@ -7,6 +7,7 @@ import time
 
 app = Flask(__name__)
 
+
 # Dados simulados da infraestrutura Renault
 class RenaultInfrastructure:
     def __init__(self):
@@ -15,8 +16,8 @@ class RenaultInfrastructure:
         self.vxrail = 10
         self.consumo_medio_w = 250
         self.fator_emissao = 0.0817  # kg CO2/kWh Brasil
-        self.sequestro_arvore = 22   # kg CO2/ano por árvore
-        self.tarifa_energia = 0.60   # R$/kWh
+        self.sequestro_arvore = 22  # kg CO2/ano por árvore
+        self.tarifa_energia = 0.60  # R$/kWh
 
         # Estado atual simulado
         self.workstations_ativas = 4200
@@ -33,7 +34,9 @@ class RenaultInfrastructure:
         else:  # Madrugada
             fator_uso = 0.2
 
-        consumo_workstations = self.workstations_ativas * self.consumo_medio_w * fator_uso / 1000
+        consumo_workstations = (
+            self.workstations_ativas * self.consumo_medio_w * fator_uso / 1000
+        )
         consumo_servidores = self.servidores_ativos * 400 / 1000  # 400W por servidor
         return consumo_workstations + consumo_servidores
 
@@ -49,27 +52,35 @@ class RenaultInfrastructure:
     def calcular_economia_potencial(self):
         # Potencial de economia desligando workstations ociosas
         workstations_ociosas = self.workstations - self.workstations_ativas
-        economia_kwh = workstations_ociosas * self.consumo_medio_w * 8 * 250 / 1000  # 8h/dia, 250 dias/ano
+        economia_kwh = (
+            workstations_ociosas * self.consumo_medio_w * 8 * 250 / 1000
+        )  # 8h/dia, 250 dias/ano
         return economia_kwh * self.tarifa_energia
+
 
 # Instância global da infraestrutura
 infra = RenaultInfrastructure()
 
-@app.route('/')
-def dashboard():
-    return render_template('dashboard.html')
 
-@app.route('/api/metrics')
+@app.route("/")
+def dashboard():
+    return render_template("dashboard.html")
+
+
+@app.route("/api/metrics")
 def get_metrics():
     infra.consumo_atual = infra.calcular_consumo_atual()
-    return jsonify({
-        'consumo_atual': infra.consumo_atual,
-        'emissoes_co2': infra.calcular_emissoes_anuais(),
-        'economia_potencial': infra.calcular_economia_potencial(),
-        'arvores_equivalentes': infra.calcular_arvores_equivalentes()
-    })
+    return jsonify(
+        {
+            "consumo_atual": infra.consumo_atual,
+            "emissoes_co2": infra.calcular_emissoes_anuais(),
+            "economia_potencial": infra.calcular_economia_potencial(),
+            "arvores_equivalentes": infra.calcular_arvores_equivalentes(),
+        }
+    )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print("🌱 EcoTI Dashboard - Sustentabilidade Digital Renault")
     print("Acesse: http://localhost:5000")
     app.run(debug=True, port=5000)
