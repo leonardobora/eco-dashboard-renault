@@ -97,7 +97,7 @@ jobs:
                 assert response.status_code == 200
                 print('[PASS] Dashboard template test passed')
                 
-            print('🎉 All Flask application tests passed!')
+            print('[SUCCESS] All Flask application tests passed!')
             
         except Exception as e:
             print(f'[FAIL] Flask application test failed: {e}')
