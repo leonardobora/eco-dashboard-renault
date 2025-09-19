@@ -68,7 +68,7 @@ jobs:
         
         try:
             from app_renault_mvp import app, infra
-            print('✅ Flask app imported successfully')
+            print('[PASS] Flask app imported successfully')
             
             # Test infrastructure calculations
             consumption = infra.calcular_consumo_atual()
@@ -76,7 +76,7 @@ jobs:
             trees = infra.calcular_arvores_equivalentes()
             savings = infra.calcular_economia_potencial()
             
-            print(f'✅ Infrastructure calculations working:')
+            print(f'[PASS] Infrastructure calculations working:')
             print(f'   Consumption: {consumption:.2f} kWh')
             print(f'   Emissions: {emissions:.0f} kg/year')
             print(f'   Trees: {trees:,}')
@@ -91,20 +91,20 @@ jobs:
                 assert 'emissoes_co2' in data
                 assert 'economia_potencial' in data
                 assert 'arvores_equivalentes' in data
-                print('✅ API endpoint test passed')
+                print('[PASS] API endpoint test passed')
                 
                 response = client.get('/')
                 assert response.status_code == 200
-                print('✅ Dashboard template test passed')
+                print('[PASS] Dashboard template test passed')
                 
             print('🎉 All Flask application tests passed!')
             
         except Exception as e:
-            print(f'❌ Flask application test failed: {e}')
+            print(f'[FAIL] Flask application test failed: {e}')
             sys.exit(1)
         "
         
-    - name: 📊 Upload coverage to Codecov
+    - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
       uses: codecov/codecov-action@v3
       with:
@@ -120,22 +120,22 @@ jobs:
     if: always()
     
     steps:
-    - name: 📊 Check Matrix Results
+    - name: Check Matrix Results
       run: |
         echo "### 🧪 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
         echo "|-----------|---------|" >> $GITHUB_STEP_SUMMARY
-        echo "| 🐍 Python Matrix Tests | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| 🎯 Code Quality | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| 🚀 Flask Application | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| 📊 API Endpoints | ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Python Matrix Tests | ${{ needs.test.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Code Quality | ${{ needs.test.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Flask Application | ${{ needs.test.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| API Endpoints | ${{ needs.test.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**EcoTI Dashboard** - Renault Transformation Day 2025 🌱" >> $GITHUB_STEP_SUMMARY
         
         if [ "${{ needs.test.result }}" != "success" ]; then
-          echo "❌ CI/CD Pipeline failed. Please check the logs above."
+          echo "[FAILED] CI/CD Pipeline failed. Please check the logs above."
           exit 1
         else
-          echo "✅ CI/CD Pipeline completed successfully!"
+          echo "[SUCCESS] CI/CD Pipeline completed successfully!"
         fi

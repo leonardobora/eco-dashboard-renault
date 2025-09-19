@@ -76,7 +76,7 @@ jobs:
         pip-audit --desc --format=json --output=pip-audit-report.json || true
         pip-audit --desc
         
-    - name: 📊 Upload Security Reports
+    - name: Upload Security Reports
       uses: actions/upload-artifact@v3
       if: always()
       with:
@@ -127,16 +127,16 @@ jobs:
     if: always()
     
     steps:
-    - name: 📊 Generate Security Summary
+    - name: Generate Security Summary
       run: |
         echo "### 🔒 Security Analysis Results" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "| Security Check | Status |" >> $GITHUB_STEP_SUMMARY
         echo "|----------------|---------|" >> $GITHUB_STEP_SUMMARY
-        echo "| 🔍 CodeQL Analysis | ${{ needs.codeql.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| 🐍 Python Security (Bandit) | ${{ needs.python-security.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| 🔒 Dependency Safety | ${{ needs.python-security.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| 🔐 Secrets Detection | ${{ needs.secrets-scan.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| CodeQL Analysis | ${{ needs.codeql.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Python Security (Bandit) | ${{ needs.python-security.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Dependency Safety | ${{ needs.python-security.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Secrets Detection | ${{ needs.secrets-scan.result == 'success' && 'PASSED' || 'FAILED' }} |" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**EcoTI Dashboard Security** - Enterprise Grade Protection 🛡️" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
@@ -151,6 +151,6 @@ jobs:
           echo "⚠️ $FAILURES security check(s) require attention." >> $GITHUB_STEP_SUMMARY
           echo "Please review the security reports and address any findings." >> $GITHUB_STEP_SUMMARY
         else
-          echo "✅ All security checks passed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "[SUCCESS] All security checks passed successfully!" >> $GITHUB_STEP_SUMMARY
           echo "Your EcoTI Dashboard meets enterprise security standards." >> $GITHUB_STEP_SUMMARY
         fi
