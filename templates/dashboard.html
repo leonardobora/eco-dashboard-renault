@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoTI Dashboard - Renault Sustentabilidade Digital</title>
-    <link rel="stylesheet" href="style.css">
+    <title>{{ title or 'EcoTI Dashboard - Renault Sustentabilidade Digital' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -36,8 +36,8 @@
                     <div class="metric-icon">⚡</div>
                     <div class="metric-content">
                         <h3>Consumo Atual</h3>
-                        <div class="metric-value" id="currentConsumption">1.344 kWh</div>
-                        <div class="metric-trend positive">-12% vs ontem</div>
+                        <div class="metric-value" id="currentConsumption">Loading...</div>
+                        <div class="metric-trend positive">Tempo real</div>
                     </div>
                 </div>
 
@@ -45,8 +45,8 @@
                     <div class="metric-icon">🌍</div>
                     <div class="metric-content">
                         <h3>Emissões CO₂/ano</h3>
-                        <div class="metric-value" id="co2Emissions">219.610 kg</div>
-                        <div class="metric-trend positive">-8% vs meta</div>
+                        <div class="metric-value" id="co2Emissions">Loading...</div>
+                        <div class="metric-trend positive">kg/ano</div>
                     </div>
                 </div>
 
@@ -54,8 +54,8 @@
                     <div class="metric-icon">💰</div>
                     <div class="metric-content">
                         <h3>Economia Potencial</h3>
-                        <div class="metric-value" id="potentialSavings">R$ 1.612.800</div>
-                        <div class="metric-trend neutral">Por ano</div>
+                        <div class="metric-value" id="potentialSavings">Loading...</div>
+                        <div class="metric-trend neutral">R$/ano</div>
                     </div>
                 </div>
 
@@ -63,7 +63,7 @@
                     <div class="metric-icon">🌳</div>
                     <div class="metric-content">
                         <h3>Equivalente em Árvores</h3>
-                        <div class="metric-value" id="treeEquivalent">9.982</div>
+                        <div class="metric-value" id="treeEquivalent">Loading...</div>
                         <div class="metric-trend neutral">Árvores plantadas</div>
                     </div>
                 </div>
@@ -93,11 +93,11 @@
                     <div class="status-summary">
                         <span class="status-item online">
                             <span class="status-dot"></span>
-                            <span>4.200 Online</span>
+                            <span id="workstationsOnline">4.200 Online</span>
                         </span>
                         <span class="status-item offline">
                             <span class="status-dot"></span>
-                            <span>1.176 Offline</span>
+                            <span id="workstationsOffline">1.176 Offline</span>
                         </span>
                         <span class="status-item eco">
                             <span class="status-dot"></span>
@@ -361,19 +361,19 @@
                 </div>
 
                 <div class="settings-card">
-                    <h3>Acesso Remoto</h3>
+                    <h3>Dados e API</h3>
                     <div class="form-group">
-                        <label class="form-label">Sistema de acesso preferido</label>
-                        <select class="form-control">
-                            <option value="anydesk">AnyDesk</option>
-                            <option value="teamviewer">TeamViewer</option>
-                            <option value="rdp">Remote Desktop</option>
-                            <option value="vnc">VNC</option>
+                        <label class="form-label">Fonte de dados atual</label>
+                        <select class="form-control" id="dataSourceSelect">
+                            <option value="synthetic" selected>Dados Sintéticos (Demo)</option>
+                            <option value="database">Banco de Dados (Produção)</option>
+                            <option value="api">API Externa</option>
+                            <option value="hybrid">Híbrido</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <button class="btn btn--primary">Testar Conexão</button>
-                        <button class="btn btn--outline">Configurar Acesso</button>
+                        <button class="btn btn--outline">Configurar Fonte</button>
                     </div>
                 </div>
             </div>
@@ -385,6 +385,6 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

@@ -17,15 +17,18 @@ Este sistema monitora e otimiza o consumo energético da infraestrutura de TI da
 
 ## 🏗️ Arquitetura do Sistema
 
-### Frontend
-- **HTML5/CSS3/JavaScript** - Interface web responsiva
+### Aplicação Unificada
+- **Flask Backend** - Servidor web e API REST integrados
+- **Template Engine** - Jinja2 para renderização dinâmica
+- **Static Assets** - CSS/JS organizados em estrutura modular
 - **Chart.js** - Visualizações e gráficos interativos
-- **Design System** - Identidade visual Renault
+- **Design System** - Identidade visual Renault (#FFCB00)
 
-### Backend
-- **Python Flask** - API REST para dados e métricas
-- **Simulação de Dados** - Infraestrutura mapeada da Renault
-- **Cálculos Ambientais** - Métricas de sustentabilidade
+### Estrutura Técnica
+- **Python Flask 2.3.3** - Aplicação web completa
+- **Templates** - Interface rica com abas e dashboards
+- **API REST** - Endpoint `/api/metrics` para dados em tempo real
+- **Cálculos Ambientais** - Métricas de sustentabilidade integradas
 
 ### Dados Simulados
 - **5.376 workstations** distribuídas por setores
@@ -39,30 +42,35 @@ Este sistema monitora e otimiza o consumo energético da infraestrutura de TI da
 - Navegador web moderno
 - Git
 
-### Instalação Rápida
+### Instalação e Execução
 
 ```bash
 # Clone o repositório
 git clone https://github.com/leonardobora/eco-dashboard-renault.git
 cd eco-dashboard-renault
 
+# Configure o ambiente virtual (recomendado)
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# Linux/Mac:
+source .venv/bin/activate
+
 # Instale as dependências
 pip install -r requirements.txt
 
-# Execute o servidor Flask
+# Execute a aplicação Flask
 python app_renault_mvp.py
 
-# Acesse o dashboard
+# Acesse o dashboard completo
 # http://localhost:5000
 ```
 
-### Versão Estática (Demonstração)
-
-Para visualizar apenas o frontend:
-```bash
-# Abra o arquivo index.html em seu navegador
-open index.html
-```
+### Aplicação Unificada
+- **Uma única aplicação** Flask com interface rica
+- **Template integrado** com visualizações avançadas
+- **API interna** para dados em tempo real
+- **Estrutura modular** para fácil manutenção
 
 ## 📊 Funcionalidades Principais
 
@@ -87,13 +95,20 @@ open index.html
 ### Estrutura de Arquivos
 ```
 eco-dashboard-renault/
-├── app_renault_mvp.py          # Servidor Flask principal
-├── index.html                  # Interface web
-├── app.js                      # Lógica JavaScript
-├── style.css                   # Estilos e design system
+├── app_renault_mvp.py          # Aplicação Flask principal
+├── templates/
+│   └── dashboard.html          # Interface rica com abas
+├── static/
+│   ├── css/
+│   │   └── style.css          # Estilos Renault
+│   └── js/
+│       └── app.js             # JavaScript integrado
 ├── requirements.txt            # Dependências Python
-├── eco-ti-dashboard.zip/       # Versão alternativa
-└── scripts/                    # Scripts auxiliares
+├── config/                     # Configurações avançadas
+├── data_sources/              # Abstração de dados
+├── tests/                     # Framework de testes
+├── docs/                      # Documentação técnica
+└── examples/                  # Implementações exemplo
 ```
 
 ### APIs Disponíveis
