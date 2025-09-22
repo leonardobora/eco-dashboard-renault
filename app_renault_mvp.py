@@ -80,7 +80,20 @@ def get_metrics():
     )
 
 
+@app.route("/sobre")
+def sobre():
+    """Página com informações sobre o projeto EcoCode.AI e a equipe UniBrasil"""
+    try:
+        with open("SOBRE.md", "r", encoding="utf-8") as f:
+            sobre_content = f.read()
+    except FileNotFoundError:
+        sobre_content = "# Página em construção\n\nConteúdo em breve..."
+    
+    return render_template("sobre.html", conteudo=sobre_content)
+
+
 if __name__ == "__main__":
-    print("🌱 EcoTI Dashboard - Sustentabilidade Digital Renault")
+    print("🌱 EcoCode.AI - Sustentabilidade Digital Renault")
     print("Acesse: http://localhost:5000")
+    print("Sobre: http://localhost:5000/sobre")
     app.run(debug=True, port=5000)
