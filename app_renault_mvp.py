@@ -4,7 +4,7 @@ import datetime
 import random
 import threading
 import time
-
+import os
 app = Flask(__name__)
 
 
@@ -96,4 +96,5 @@ if __name__ == "__main__":
     print("🌱 EcoCode.AI - Sustentabilidade Digital Renault")
     print("Acesse: http://localhost:5000")
     print("Sobre: http://localhost:5000/sobre")
-    app.run(debug=True, port=5000)
+    debug = os.environ.get('FLASK_DEBUG', '0') == '1'
+    app.run(debug=debug, port=5000)
