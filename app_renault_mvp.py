@@ -5,6 +5,7 @@ import random
 import threading
 import time
 import os
+
 app = Flask(__name__)
 
 
@@ -88,7 +89,7 @@ def sobre():
             sobre_content = f.read()
     except FileNotFoundError:
         sobre_content = "# Página em construção\n\nConteúdo em breve..."
-    
+
     return render_template("sobre.html", conteudo=sobre_content)
 
 
@@ -96,5 +97,5 @@ if __name__ == "__main__":
     print("🌱 EcoCode.AI - Sustentabilidade Digital Renault")
     print("Acesse: http://localhost:5000")
     print("Sobre: http://localhost:5000/sobre")
-    debug = os.environ.get('FLASK_DEBUG', '0') == '1'
+    debug = os.environ.get("FLASK_DEBUG", "0") == "1"
     app.run(debug=debug, port=5000)
