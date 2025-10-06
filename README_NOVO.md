@@ -212,6 +212,12 @@ curl -s http://localhost:5000/api/metrics | python -m json.tool
 - 📊 [Implementação](IMPLEMENTATION_SUMMARY.md) - Resumo técnico
 - 🧪 [Relatório de Testes](TEST_REPORT.md) - Cobertura e validação
 
+### 🌐 GitHub Pages - Hospedagem Estática
+- 📖 [Análise de Viabilidade](docs/GITHUB_PAGES_FEASIBILITY.md) - Avaliação técnica completa
+- 🚀 [Guia de Implementação](docs/GITHUB_PAGES_IMPLEMENTATION.md) - Passo a passo detalhado
+- ⚡ [Guia Rápido](docs/GITHUB_PAGES_QUICKSTART.md) - Deploy em 5 passos
+- 📊 [Flask vs GitHub Pages](docs/FLASK_VS_GITHUB_PAGES.md) - Comparação e recomendações
+
 ### APIs e Endpoints
 - `GET /` - Dashboard principal
 - `GET /sobre` - Página sobre o projeto e equipe
