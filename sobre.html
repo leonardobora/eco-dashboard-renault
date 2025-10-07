@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre - EcoCode.AI | UniBrasil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css'">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #FFCB00 0%, #FFA500 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .mentor-card {
+            border-left: 5px solid #FFCB00;
+        }
+        
+        .student-card {
+            border-left: 5px solid #007bff;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 3px solid #FFCB00;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFCB00;
+        }
+        
+        .achievement-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: #FFCB00;
+            border-color: #FFCB00;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #FFCB00;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FFCB00;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #FFCB00;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf text-success"></i>
+                <span class="text-warning fw-bold">EcoCode.AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="sobre.html">
+                            <i class="fas fa-info-circle"></i> Sobre o Projeto
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/leonardobora/eco-dashboard-renault" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-brain"></i> EcoCode.AI
+                    </h1>
+                    <p class="lead mb-4">
+                        Solução inovadora de inteligência artificial para sustentabilidade digital
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                            <i class="fas fa-university"></i> UniBrasil
+                        </span>
+                        <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                            <i class="fas fa-car"></i> Renault Transformation Day 2025
+                        </span>
+                        <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                            <i class="fas fa-laptop-code"></i> IS/IT Challenge
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="stats-card bg-white text-dark">
+                        <div class="stats-number">24</div>
+                        <p class="mb-0">Universidades Competindo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="aboutTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="projeto-tab" data-bs-toggle="pill" data-bs-target="#projeto" type="button">
+                    <i class="fas fa-lightbulb"></i> O Projeto
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="equipe-tab" data-bs-toggle="pill" data-bs-target="#equipe" type="button">
+                    <i class="fas fa-users"></i> Nossa Equipe
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="competicao-tab" data-bs-toggle="pill" data-bs-target="#competicao" type="button">
+                    <i class="fas fa-trophy"></i> Transformation Day
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="unibrasil-tab" data-bs-toggle="pill" data-bs-target="#unibrasil" type="button">
+                    <i class="fas fa-graduation-cap"></i> UniBrasil
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="aboutTabsContent">
+            <!-- Projeto Tab -->
+            <div class="tab-pane fade show active" id="projeto" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h2 class="section-title">🎯 Nosso Desafio</h2>
+                        <div class="alert alert-warning">
+                            <h5><i class="fas fa-leaf"></i> Sustentabilidade Digital</h5>
+                            <p class="mb-0">Desenvolver uma solução de IA para rastrear e reduzir a pegada de carbono da infraestrutura de TI e otimizar a utilização de recursos.</p>
+                        </div>
+                        
+                        <h3>🔍 Contexto do Problema</h3>
+                        <p>O crescimento das infraestruturas de TI, seja on-premise ou na nuvem, tem trazido ganhos de performance, mas também aumentos silenciosos no consumo de energia e na pegada de carbono. Muitos recursos seguem ligados sem uso real, gerando desperdício e impacto ambiental desnecessário.</p>
+                        
+                        <h3>🚀 Nossa Solução</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="team-card">
+                                    <h5><i class="fas fa-chart-line text-primary"></i> Rastreamento em Tempo Real</h5>
+                                    <p>Monitora a pegada de carbono da infraestrutura de TI, correlacionando consumo, tipos de energia e emissões por workload</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="team-card">
+                                    <h5><i class="fas fa-lightbulb text-warning"></i> Recomendações Inteligentes</h5>
+                                    <p>Sugere ações sustentáveis como migração para regiões mais verdes, uso de horários com menor impacto energético</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="team-card">
+                                    <h5><i class="fas fa-bolt text-danger"></i> Detecção Automática</h5>
+                                    <p>Identifica e desativa automaticamente recursos ociosos ou subutilizados, baseado em padrões de uso</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="team-card">
+                                    <h5><i class="fas fa-tachometer-alt text-success"></i> Dashboards Executivos</h5>
+                                    <p>Fornece visibilidade completa e alertas para tomada de decisão proativa em sustentabilidade digital</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <h3>🌱 Compromisso com ODS</h3>
+                        <div class="team-card">
+                            <h6><i class="fas fa-battery-three-quarters text-warning"></i> ODS 7</h6>
+                            <p>Energia Limpa e Acessível</p>
+                        </div>
+                        <div class="team-card">
+                            <h6><i class="fas fa-industry text-primary"></i> ODS 9</h6>
+                            <p>Indústria, Inovação e Infraestrutura</p>
+                        </div>
+                        <div class="team-card">
+                            <h6><i class="fas fa-recycle text-success"></i> ODS 12</h6>
+                            <p>Consumo e Produção Responsáveis</p>
+                        </div>
+                        <div class="team-card">
+                            <h6><i class="fas fa-globe-americas text-info"></i> ODS 13</h6>
+                            <p>Ação contra a Mudança Global do Clima</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Equipe Tab -->
+            <div class="tab-pane fade" id="equipe" role="tabpanel">
+                <h2 class="section-title">👨‍🏫 Mentores Especialistas</h2>
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card mentor-card">
+                            <h5>Prof. Mozart Hasse</h5>
+                            <p class="text-muted">Engenharia de Software</p>
+                            <p>Arquitetura de sistemas e metodologias de desenvolvimento. Experiência em sistemas distribuídos e desenvolvimento ágil.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card mentor-card">
+                            <h5>Prof. Orlei Pombeiro</h5>
+                            <p class="text-muted">Engenharia de Software</p>
+                            <p>Qualidade de software e processos de desenvolvimento. Experiência em engenharia de software e gestão de projetos.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card mentor-card">
+                            <h5>Prof. Renan Zunta Raia</h5>
+                            <p class="text-muted">Engenharia Ambiental</p>
+                            <p>Metodologias de sustentabilidade e impacto ambiental. Experiência em gestão ambiental corporativa.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card mentor-card">
+                            <h5>Prof. Wilson Parisotto</h5>
+                            <p class="text-muted">Engenharia de Produção</p>
+                            <p>Otimização de processos e eficiência operacional. Experiência em lean manufacturing.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card mentor-card">
+                            <h5>Prof. Lauro Katsumi</h5>
+                            <p class="text-muted">Engenharia Elétrica</p>
+                            <p>Sistemas de energia e eficiência energética. Experiência em sistemas de potência e monitoramento energético.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title mt-5">👥 Estudantes Desenvolvedores</h2>
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card student-card">
+                            <h5>Leonardo Bora</h5>
+                            <p class="text-muted">Tech Lead - Engenharia de Software</p>
+                            <p>Arquitetura geral, CI/CD, infraestrutura, coordenação técnica. Especialidades: Python, Flask, Docker, GitHub Actions.</p>
+                            <a href="https://github.com/leonardobora" class="btn btn-sm btn-outline-primary">
+                                <i class="fab fa-github"></i> @leonardobora
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card student-card">
+                            <h5>Daniel Nhemihes</h5>
+                            <p class="text-muted">Backend Developer - Engenharia de Software</p>
+                            <p>APIs, microserviços, integração de sistemas. Especialidades: Python, Flask, bases de dados, DevOps.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card student-card">
+                            <h5>Gabriel Barvik</h5>
+                            <p class="text-muted">Sistemas Energéticos - Engenharia Elétrica</p>
+                            <p>Cálculos de consumo, eficiência energética, modelagem. Especialidades: Sistemas de potência, instrumentação, IoT.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card student-card">
+                            <h5>Sthefany Santos</h5>
+                            <p class="text-muted">Frontend & UX - Engenharia de Software</p>
+                            <p>Interface de usuário, dashboards, experiência do usuário. Especialidades: JavaScript, React, HTML5, CSS3.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card student-card">
+                            <h5>Kamille Gasparin</h5>
+                            <p class="text-muted">Processos & Otimização - Engenharia de Produção</p>
+                            <p>Mapeamento de processos, KPIs, análise de eficiência. Especialidades: Lean, Six Sigma, gestão de operações.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card student-card">
+                            <h5>Meridiana</h5>
+                            <p class="text-muted">Especialista em Sustentabilidade - Eng. Ambiental</p>
+                            <p>Metodologias ambientais, cálculos de pegada de carbono, compliance. Especialidades: Gestão ambiental, análise de impacto.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="team-card student-card">
+                            <h5>Suelen</h5>
+                            <p class="text-muted">Impacto Ambiental - Engenharia Ambiental</p>
+                            <p>Validação de métricas, benchmarks, relatórios de impacto. Especialidades: Monitoramento ambiental, análise de dados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transformation Day Tab -->
+            <div class="tab-pane fade" id="competicao" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h2 class="section-title">🏆 Transformation Day 2025</h2>
+                        <p class="lead">Competição anual da Renault que reúne 24 universidades de todo o Brasil em 12 desafios inovadores.</p>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h5>📅 Data do Evento</h5>
+                                <p><strong>24 de outubro de 2025</strong></p>
+                            </div>
+                            <div class="timeline-item">
+                                <h5>📍 Local</h5>
+                                <p>Fábrica Renault, São José dos Pinhais, PR</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h5>🎯 Nossa Categoria</h5>
+                                <p><strong>IS/IT</strong> (Information Systems/Information Technology)</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h5>🥊 Competidor Direto</h5>
+                                <p><strong>Unicesumar</strong></p>
+                            </div>
+                            <div class="timeline-item">
+                                <h5>⏰ Formato</h5>
+                                <p>Apresentação de <strong>10 minutos</strong> com máximo de <strong>5 slides</strong></p>
+                            </div>
+                        </div>
+
+                        <h3>📊 Critérios de Avaliação</h3>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="stats-card">
+                                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                    <h5>Aplicabilidade</h5>
+                                    <p>A solução faz sentido e atende à necessidade identificada?</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stats-card">
+                                    <i class="fas fa-cogs fa-2x text-primary mb-2"></i>
+                                    <h5>Factibilidade</h5>
+                                    <p>É possível executar considerando recursos disponíveis?</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stats-card">
+                                    <i class="fas fa-rocket fa-2x text-warning mb-2"></i>
+                                    <h5>Facilidade</h5>
+                                    <p>Pode ser aplicada de forma eficiente?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="stats-card">
+                            <div class="stats-number">24</div>
+                            <p>Universidades Participantes</p>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stats-number">12</div>
+                            <p>Desafios Inovadores</p>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stats-number">5</div>
+                            <p>Slides Máximo</p>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stats-number">10</div>
+                            <p>Minutos de Apresentação</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UniBrasil Tab -->
+            <div class="tab-pane fade" id="unibrasil" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h2 class="section-title">🏅 Histórico de Sucesso da UniBrasil</h2>
+                        <p class="lead">A UniBrasil tem um histórico impressionante no Transformation Day:</p>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h5>🥇 2024 - Ano de Ouro</h5>
+                                <div class="achievement-badge">1º lugar categoria "Case de Compras"</div>
+                                <div class="achievement-badge">3º lugar geral</div>
+                                <p>Entre 20 universidades participantes</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h5>⭐ 2023 - Participação Destacada</h5>
+                                <div class="achievement-badge">Top 12 universidades</div>
+                                <p>Selecionada entre as melhores equipes do Brasil</p>
+                            </div>
+                        </div>
+
+                        <h3>🎉 Conquistas Recentes (2024)</h3>
+                        <div class="alert alert-success">
+                            <h5><i class="fas fa-trophy"></i> Solução Premiada</h5>
+                            <p>Nossa equipe multidisciplinar de Administração, Ciências Contábeis e Engenharia de Software desenvolveu uma solução inovadora para gestão de contratos que conquistou o primeiro lugar na categoria "Case de Compras" e terceiro lugar geral entre todas as 20 ideias apresentadas.</p>
+                        </div>
+
+                        <h3>🌐 Sobre a UniBrasil</h3>
+                        <p>O <strong>Centro Universitário UniBrasil</strong> é uma instituição de ensino superior reconhecida pela excelência em formar profissionais capacitados para os desafios do mundo do trabalho. Nossa participação consistente e bem-sucedida no Transformation Day demonstra nosso compromisso com a inovação e sustentabilidade.</p>
+
+                        <h4>🤝 Parceria com a Renault</h4>
+                        <p>A colaboração entre a UniBrasil e a Renault representa uma oportunidade única onde:</p>
+                        <ul>
+                            <li><strong>Estudantes</strong> aplicam conhecimentos teóricos em contextos reais</li>
+                            <li><strong>Renault</strong> obtém soluções inovadoras para desafios corporativos</li>
+                            <li><strong>Sociedade</strong> se beneficia de tecnologias mais sustentáveis</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-card">
+                            <h5><i class="fas fa-award text-warning"></i> Reconhecimentos</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-medal text-warning"></i> Equipes multidisciplinares premiadas</li>
+                                <li><i class="fas fa-lightbulb text-primary"></i> Soluções inovadoras consistentes</li>
+                                <li><i class="fas fa-leaf text-success"></i> Compromisso com sustentabilidade</li>
+                                <li><i class="fas fa-handshake text-info"></i> Parceria estratégica com Renault</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="team-card">
+                            <h5><i class="fas fa-chart-line text-success"></i> Estatísticas</h5>
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="stats-number">2</div>
+                                    <small>Anos consecutivos no pódio</small>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stats-number">3</div>
+                                    <small>Posição geral em 2024</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center mt-5 mb-5">
+            <div class="team-card">
+                <h3>🎯 Objetivo Final</h3>
+                <p class="lead">Unir automação inteligente com responsabilidade ambiental, promovendo TI verde, eficiente e autônoma.</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="index.html#" class="btn btn-warning btn-lg">
+                        <i class="fas fa-chart-line"></i> Ver Dashboard
+                    </a>
+                    <a href="https://github.com/leonardobora/eco-dashboard-renault" class="btn btn-outline-primary btn-lg" target="_blank">
+                        <i class="fab fa-github"></i> Código no GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-brain"></i> EcoCode.AI</h5>
+                    <p>Solução de sustentabilidade digital para o Transformation Day 2025</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Contato</h5>
+                    <p>
+                        <i class="fas fa-envelope"></i> equipe.ecocode@unibrasil.edu.br<br>
+                        <i class="fab fa-github"></i> <a href="https://github.com/leonardobora/eco-dashboard-renault" class="text-light">GitHub Repository</a>
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <small>&copy; 2025 UniBrasil - EcoCode.AI Team. Última atualização: 22 de setembro de 2025</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

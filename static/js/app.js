@@ -52,8 +52,29 @@ let energyChart = null;
 let sectorChart = null;
 let predictionChart = null;
 
-// API functions to connect to Flask backend
+// API functions to connect to Flask backend or use local calculator
 async function fetchMetrics() {
+  // Check if RenaultInfrastructure class is available (static version)
+  if (typeof window.RenaultInfrastructure !== 'undefined') {
+    try {
+      // Use local calculator (GitHub Pages version)
+      const infra = new window.RenaultInfrastructure();
+      const data = infra.getMetrics();
+      
+      // Update app data with calculated metrics
+      appData.metricas_atuais.consumo_atual_kwh = data.consumo_atual;
+      appData.metricas_atuais.emissoes_co2_kg_ano = data.emissoes_co2;
+      appData.metricas_atuais.economia_potencial_reais = data.economia_potencial;
+      appData.metricas_atuais.arvores_equivalentes = data.arvores_equivalentes;
+      
+      console.log('📊 Metrics calculated locally (GitHub Pages mode):', data);
+      return data;
+    } catch (error) {
+      console.error('Error calculating metrics locally:', error);
+    }
+  }
+  
+  // Try Flask API (development/production mode)
   try {
     const response = await fetch('/api/metrics');
     if (!response.ok) {
@@ -67,10 +88,11 @@ async function fetchMetrics() {
     appData.metricas_atuais.economia_potencial_reais = data.economia_potencial;
     appData.metricas_atuais.arvores_equivalentes = data.arvores_equivalentes;
     
+    console.log('✅ Metrics fetched from Flask API:', data);
     return data;
   } catch (error) {
-    console.error('Error fetching metrics:', error);
-    // Return mock data as fallback
+    console.error('Error fetching metrics from API:', error);
+    // Return mock data as ultimate fallback
     return {
       consumo_atual: appData.metricas_atuais.consumo_atual_kwh,
       emissoes_co2: appData.metricas_atuais.emissoes_co2_kg_ano,
@@ -441,4 +463,9 @@ window.addEventListener('error', function(e) {
 // Log successful initialization
 console.log('✅ EcoTI Dashboard - Flask Integration Active');
 console.log('🔄 Real-time data updates every 10 seconds');
-console.log('🌐 Connected to Flask API at /api/metrics');
+// Log connection mode
+if (typeof window.RenaultInfrastructure !== 'undefined') {
+  console.log('🌐 Running in static mode (GitHub Pages) - using local metrics calculator');
+} else {
+  console.log('🌐 Running in Flask mode - connected to API at /api/metrics');
+}
