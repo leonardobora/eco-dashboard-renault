@@ -1,4 +1,4 @@
-name: Deploy static content to Pages
+name: 🚀 Deploy static content to Pages
 
 on:
   push:
@@ -15,20 +15,132 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  validate-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v4
-      - name: Setup Pages
+        
+      - name: ✅ Validate Static Files
+        run: |
+          echo "### 🔍 Validating GitHub Pages Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check required files exist
+          MISSING_FILES=0
+          
+          if [ ! -f "index.html" ]; then
+            echo "❌ index.html is missing!" >> $GITHUB_STEP_SUMMARY
+            MISSING_FILES=$((MISSING_FILES + 1))
+          else
+            echo "✅ index.html found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ ! -f "sobre.html" ]; then
+            echo "❌ sobre.html is missing!" >> $GITHUB_STEP_SUMMARY
+            MISSING_FILES=$((MISSING_FILES + 1))
+          else
+            echo "✅ sobre.html found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ ! -f "static/css/style.css" ]; then
+            echo "❌ static/css/style.css is missing!" >> $GITHUB_STEP_SUMMARY
+            MISSING_FILES=$((MISSING_FILES + 1))
+          else
+            echo "✅ static/css/style.css found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ ! -f "static/js/app.js" ]; then
+            echo "❌ static/js/app.js is missing!" >> $GITHUB_STEP_SUMMARY
+            MISSING_FILES=$((MISSING_FILES + 1))
+          else
+            echo "✅ static/js/app.js found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ ! -f "static/js/metrics-calculator.js" ]; then
+            echo "❌ static/js/metrics-calculator.js is missing!" >> $GITHUB_STEP_SUMMARY
+            MISSING_FILES=$((MISSING_FILES + 1))
+          else
+            echo "✅ static/js/metrics-calculator.js found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ $MISSING_FILES -gt 0 ]; then
+            echo "🚨 **$MISSING_FILES critical file(s) missing!**" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "🎉 **All required files present!**" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Validate HTML structure
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔍 HTML Validation" >> $GITHUB_STEP_SUMMARY
+          
+          if grep -q "metrics-calculator.js" index.html; then
+            echo "✅ index.html includes metrics-calculator.js" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ index.html missing metrics-calculator.js" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if grep -q "style.css" index.html; then
+            echo "✅ index.html includes style.css" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ index.html missing style.css link" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          if grep -q "sobre.html" index.html; then
+            echo "✅ Navigation link to sobre.html found" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Navigation link to sobre.html missing" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+      - name: 🔧 Prepare Deployment Directory
+        run: |
+          echo "Preparing clean deployment directory..."
+          mkdir -p _deploy
+          
+          # Copy essential files for GitHub Pages
+          cp index.html _deploy/
+          cp sobre.html _deploy/
+          cp -r static _deploy/
+          
+          # Add .nojekyll to prevent Jekyll processing
+          touch _deploy/.nojekyll
+          
+          echo "Deployment directory prepared successfully"
+          echo "Files included:"
+          ls -lah _deploy/
+          
+      - name: 📦 Setup Pages
         uses: actions/configure-pages@v5
-      - name: Upload artifact
+        
+      - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-      - name: Deploy to GitHub Pages
+          path: '_deploy'
+          
+      - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        
+      - name: 📊 Deployment Summary
+        if: success()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎉 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Dashboard URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Sobre URL:** ${{ steps.deployment.outputs.page_url }}sobre.html" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Next Steps:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. Wait 1-2 minutes for propagation" >> $GITHUB_STEP_SUMMARY
+          echo "2. Visit the dashboard URL above" >> $GITHUB_STEP_SUMMARY
+          echo "3. Verify metrics are calculating correctly" >> $GITHUB_STEP_SUMMARY
+          echo "4. Check browser console for 'Running in static mode'" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**EcoTI Dashboard** - Renault Sustentabilidade Digital 🌱" >> $GITHUB_STEP_SUMMARY
