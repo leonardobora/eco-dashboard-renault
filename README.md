@@ -17,6 +17,36 @@ Este sistema monitora e otimiza o consumo energético da infraestrutura de TI da
 
 ## 🏗️ Arquitetura do Sistema
 
+### 🎯 Duas Versões Disponíveis
+
+Este projeto oferece **duas versões funcionais** do dashboard:
+
+#### 1️⃣ Versão Flask (Desenvolvimento e Produção)
+- ✅ **Backend Python completo** com API REST
+- ✅ **Templates Jinja2 dinâmicos**
+- ✅ **Cálculos server-side** em Python
+- ✅ **Ideal para**: Desenvolvimento local e deploy em servidores
+- 📍 **Arquivos**: `app_renault_mvp.py`, `templates/`, `static/`
+
+#### 2️⃣ Versão Estática (GitHub Pages)
+- ✅ **HTML puro** sem backend
+- ✅ **Cálculos client-side** em JavaScript
+- ✅ **Deploy gratuito** no GitHub Pages
+- ✅ **Ideal para**: Demonstrações, portfólio, eventos
+- 📍 **Arquivos**: `index.html`, `sobre.html`, `static/js/metrics-calculator.js`
+
+### Como Funciona?
+
+**Flask Version:**
+```
+Navegador → Flask Server → Python (cálculos) → Templates Jinja2 → HTML
+```
+
+**GitHub Pages Version:**
+```
+Navegador → HTML estático → JavaScript (cálculos) → Renderização
+```
+
 ### Aplicação Unificada
 - **Flask Backend** - Servidor web e API REST integrados
 - **Template Engine** - Jinja2 para renderização dinâmica
@@ -38,11 +68,11 @@ Este sistema monitora e otimiza o consumo energético da infraestrutura de TI da
 ## 🚀 Instalação e Configuração
 
 ### Pré-requisitos
-- Python 3.8+
+- Python 3.8+ (apenas para versão Flask)
 - Navegador web moderno
 - Git
 
-### Instalação e Execução
+### 🐍 Opção 1: Versão Flask (Desenvolvimento)
 
 ```bash
 # Clone o repositório
@@ -63,8 +93,38 @@ pip install -r requirements.txt
 python app_renault_mvp.py
 
 # Acesse o dashboard completo
-# http://localhost:5000
+# Dashboard: http://localhost:5000
+# Sobre: http://localhost:5000/sobre
+# API: http://localhost:5000/api/metrics
 ```
+
+**Teste da API:**
+```bash
+curl -s http://localhost:5000/api/metrics | python -m json.tool
+```
+
+### 🌐 Opção 2: Versão Estática (GitHub Pages)
+
+#### Teste Local:
+```bash
+# Clone o repositório
+git clone https://github.com/leonardobora/eco-dashboard-renault.git
+cd eco-dashboard-renault
+
+# Inicie um servidor HTTP simples
+python3 -m http.server 8080 --bind localhost
+
+# Acesse no navegador
+# http://localhost:8080/index.html
+# http://localhost:8080/sobre.html
+```
+
+#### Deploy no GitHub Pages:
+1. Acesse: `Settings` → `Pages` no GitHub
+2. Source: `main` branch
+3. Folder: `/ (root)`
+4. Salve e aguarde o build (2-5 minutos)
+5. Acesse: `https://leonardobora.github.io/eco-dashboard-renault/`
 
 ### Aplicação Unificada
 - **Uma única aplicação** Flask com interface rica
@@ -90,26 +150,105 @@ python app_renault_mvp.py
 - 🎯 **Recomendações Automáticas**: IA para economia energética
 - 📋 **Relatórios**: Exportação de dados e métricas
 
+## 📊 Flask vs GitHub Pages: Comparação
+
+### Funcionalidades
+
+| Recurso | Flask | GitHub Pages |
+|---------|-------|--------------|
+| **Dashboard completo** | ✅ | ✅ |
+| **Métricas em tempo real** | ✅ | ✅ |
+| **Gráficos Chart.js** | ✅ | ✅ |
+| **Design Renault** | ✅ | ✅ |
+| **API REST** | ✅ | ❌ |
+| **Cálculos Python** | ✅ | ❌ |
+| **Cálculos JavaScript** | ❌ | ✅ |
+| **Deploy gratuito** | ❌ | ✅ |
+| **Custo de hospedagem** | R$ 720-2.300/ano | R$ 0/ano |
+
+### Quando Usar Cada Versão?
+
+**Use Flask quando:**
+- 🔧 Desenvolvimento local
+- 🏢 Deploy em servidor próprio/cloud
+- 🔌 Integração com dados reais (SNMP, databases)
+- 👥 Autenticação de usuários necessária
+- 📡 APIs externas precisam ser consumidas
+
+**Use GitHub Pages quando:**
+- 🎪 Apresentações e demonstrações
+- 💼 Portfólio e eventos
+- 🚀 Deploy rápido e gratuito
+- 🌐 Acesso público sem infraestrutura
+- 📱 Compartilhamento via URL
+
+### 🔄 Como o `app.js` Detecta o Ambiente?
+
+O JavaScript detecta automaticamente qual versão está rodando:
+
+```javascript
+// static/js/app.js
+async function fetchMetrics() {
+  // Se metrics-calculator.js foi carregado (GitHub Pages)
+  if (typeof window.RenaultInfrastructure !== 'undefined') {
+    // Usa cálculos locais em JavaScript
+    const infra = new window.RenaultInfrastructure();
+    return infra.getMetrics();
+  }
+  
+  // Senão, tenta API Flask
+  const response = await fetch('/api/metrics');
+  return await response.json();
+}
+```
+
+### 📁 Arquivos por Versão
+
+**Flask:**
+- `app_renault_mvp.py` - Backend principal
+- `templates/dashboard.html` - Template Jinja2
+- `templates/sobre.html` - Página sobre
+- Acesso via: `http://localhost:5000`
+
+**GitHub Pages:**
+- `index.html` - HTML puro (convertido)
+- `sobre.html` - HTML puro (convertido)
+- `static/js/metrics-calculator.js` - Cálculos em JS
+- Acesso via: `https://leonardobora.github.io/eco-dashboard-renault/`
+
 ## 🔧 Configuração Técnica
 
 ### Estrutura de Arquivos
 ```
 eco-dashboard-renault/
-├── app_renault_mvp.py          # Aplicação Flask principal
-├── templates/
-│   └── dashboard.html          # Interface rica com abas
-├── static/
+├── app_renault_mvp.py          # 🐍 Aplicação Flask principal
+├── index.html                  # 🌐 Dashboard estático (GitHub Pages)
+├── sobre.html                  # 🌐 Página sobre estática (GitHub Pages)
+├── templates/                  # 🐍 Templates Flask (Jinja2)
+│   ├── dashboard.html          # Interface rica com abas
+│   └── sobre.html              # Página sobre o projeto
+├── static/                     # 📦 Assets compartilhados
 │   ├── css/
-│   │   └── style.css          # Estilos Renault
+│   │   └── style.css          # Estilos Renault (#FFCB00)
 │   └── js/
-│       └── app.js             # JavaScript integrado
+│       ├── app.js             # 🔄 Auto-detecta Flask/Pages
+│       └── metrics-calculator.js  # 🌐 Cálculos JavaScript (Pages)
 ├── requirements.txt            # Dependências Python
 ├── config/                     # Configurações avançadas
 ├── data_sources/              # Abstração de dados
 ├── tests/                     # Framework de testes
-├── docs/                      # Documentação técnica
+├── docs/                      # 📚 Documentação técnica
+│   ├── FLASK_VS_GITHUB_PAGES.md
+│   ├── GITHUB_PAGES_IMPLEMENTATION.md
+│   └── GITHUB_PAGES_QUICKSTART.md
 └── examples/                  # Implementações exemplo
 ```
+
+**Legenda:**
+- 🐍 Usado apenas na versão Flask
+- 🌐 Usado apenas na versão GitHub Pages
+- 🔄 Inteligente: funciona em ambas versões
+- 📦 Compartilhado entre ambas versões
 
 ### APIs Disponíveis
 
