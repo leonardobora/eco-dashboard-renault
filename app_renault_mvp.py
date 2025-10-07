@@ -99,7 +99,6 @@ def get_metrics():
     
     Tenta coletar dados via SNMP primeiro, com fallback para dados simulados
     """
-    fonte = 'simulado'
     consumo_servidores_kwh = 0
     
     # Tentar coletar via SNMP
