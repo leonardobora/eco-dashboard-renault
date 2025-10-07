@@ -103,6 +103,37 @@ python app_renault_mvp.py
 curl -s http://localhost:5000/api/metrics | python -m json.tool
 ```
 
+**Resposta esperada:**
+```json
+{
+  "consumo_atual": 841.935,
+  "emissoes_co2": 602566.14,
+  "economia_potencial": 352800.0,
+  "arvores_equivalentes": 27389,
+  "fonte": "simulado",          ← Indica origem dos dados
+  "detalhes_fonte": {           ← Novo: breakdown por componente
+    "servidores": "simulado",
+    "workstations": "simulado"
+  }
+}
+```
+
+**Configuração SNMP (Opcional):**
+Para habilitar monitoramento real dos servidores:
+```bash
+# 1. Configure SNMPv3 nos servidores (ver SNMP_SETUP.md)
+# 2. Edite renault_servers.json com IPs e credenciais
+# 3. Reinicie a aplicação - coleta SNMP ativa automaticamente!
+
+# Teste a coleta SNMP:
+python3 -c "from snmp_collector import SNMPCollector; \
+c = SNMPCollector(); \
+consumption, fonte = c.get_total_consumption_kwh(); \
+print(f'Consumo: {consumption:.2f} kWh - Fonte: {fonte}')"
+```
+
+📖 **Guia completo**: [SNMP_QUICKSTART.md](SNMP_QUICKSTART.md)
+
 ### 🌐 Opção 2: Versão Estática (GitHub Pages)
 
 #### Teste Local:
@@ -139,6 +170,18 @@ python3 -m http.server 8080 --bind localhost
 - 🌍 **Emissões CO₂**: Cálculo anual em kg
 - 💰 **Economia Potencial**: Valor em R$ por ano
 - 🌳 **Equivalente em Árvores**: Impacto visual do carbono
+
+### Monitoramento SNMP Real ✨ **NOVO**
+- 🔌 **Coleta via SNMPv3**: Dados reais dos servidores HP DL380 e VxRail
+- 🔐 **Segurança**: SHA-256 auth + AES-128 encryption
+- 🚀 **Performance**: Cache 5min, rate limiting, retry automático
+- 🛡️ **Resiliência**: Fallback automático para dados simulados
+- 📊 **Suporte Multi-Geração**: HP Gen8/Gen9/Gen10 + Dell VxRail
+- 📍 **Indicador de Fonte**: Campo `fonte` na API mostra origem dos dados
+
+> **Modo Híbrido**: Funciona sem configuração SNMP (dados simulados) e automaticamente coleta dados reais quando configurado. Zero downtime!
+>
+> 📖 **Documentação**: Ver [SNMP_SETUP.md](SNMP_SETUP.md) e [SNMP_QUICKSTART.md](SNMP_QUICKSTART.md)
 
 ### Monitoramento
 - 📈 **Gráficos em Tempo Real**: Consumo por horário

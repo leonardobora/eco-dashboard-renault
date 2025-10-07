@@ -5,6 +5,20 @@ import random
 import threading
 import time
 import os
+import logging
+
+# Configurar logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Importar SNMP collector
+try:
+    from snmp_collector import SNMPCollector
+    SNMP_COLLECTOR_AVAILABLE = True
+    logger.info("SNMP Collector carregado com sucesso")
+except ImportError as e:
+    SNMP_COLLECTOR_AVAILABLE = False
+    logger.warning(f"SNMP Collector não disponível: {e}")
 
 app = Flask(__name__)
 
@@ -62,6 +76,16 @@ class RenaultInfrastructure:
 # Instância global da infraestrutura
 infra = RenaultInfrastructure()
 
+# Instância global do SNMP collector (se disponível)
+snmp_collector = None
+if SNMP_COLLECTOR_AVAILABLE:
+    try:
+        snmp_collector = SNMPCollector()
+        logger.info("SNMP Collector inicializado")
+    except Exception as e:
+        logger.warning(f"Erro ao inicializar SNMP Collector: {e}")
+        snmp_collector = None
+
 
 @app.route("/")
 def dashboard():
@@ -70,13 +94,60 @@ def dashboard():
 
 @app.route("/api/metrics")
 def get_metrics():
-    infra.consumo_atual = infra.calcular_consumo_atual()
+    """
+    Endpoint de métricas com suporte a SNMP
+    
+    Tenta coletar dados via SNMP primeiro, com fallback para dados simulados
+    """
+    consumo_servidores_kwh = 0
+    
+    # Tentar coletar via SNMP
+    if snmp_collector:
+        try:
+            # Coletar consumo dos servidores via SNMP
+            consumo_servidores_kwh, fonte_snmp = snmp_collector.get_total_consumption_kwh()
+            fonte = fonte_snmp
+            logger.info(f"Métricas coletadas via SNMP: {consumo_servidores_kwh:.2f} kWh (fonte: {fonte})")
+        except Exception as e:
+            logger.warning(f"Erro na coleta SNMP, usando simulação: {e}")
+            # Fallback para cálculo simulado
+            consumo_servidores_kwh = infra.servidores_ativos * 400 / 1000
+            fonte = 'simulado'
+    else:
+        # Usar dados simulados (servidor apenas)
+        consumo_servidores_kwh = infra.servidores_ativos * 400 / 1000
+        fonte = 'simulado'
+    
+    # Calcular consumo de workstations (sempre simulado por enquanto)
+    hora_atual = datetime.datetime.now().hour
+    if 8 <= hora_atual <= 18:  # Horário comercial
+        fator_uso = 0.8
+    elif 19 <= hora_atual <= 22:  # Horário reduzido
+        fator_uso = 0.4
+    else:  # Madrugada
+        fator_uso = 0.2
+    
+    consumo_workstations_kwh = (
+        infra.workstations_ativas * infra.consumo_medio_w * fator_uso / 1000
+    )
+    
+    # Consumo total
+    consumo_total_kwh = consumo_workstations_kwh + consumo_servidores_kwh
+    
+    # Atualizar infraestrutura
+    infra.consumo_atual = consumo_total_kwh
+    
     return jsonify(
         {
-            "consumo_atual": infra.consumo_atual,
+            "consumo_atual": consumo_total_kwh,
             "emissoes_co2": infra.calcular_emissoes_anuais(),
             "economia_potencial": infra.calcular_economia_potencial(),
             "arvores_equivalentes": infra.calcular_arvores_equivalentes(),
+            "fonte": fonte,  # Novo campo indicando fonte dos dados
+            "detalhes_fonte": {
+                "servidores": fonte,
+                "workstations": "simulado"
+            }
         }
     )
 

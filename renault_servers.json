@@ -1,0 +1,77 @@
+{
+  "comentario": "Arquivo de configuração SNMP para servidores Renault - EcoTI Dashboard",
+  "versao": "1.0",
+  "data_atualizacao": "2025-01-18",
+  
+  "snmp_credentials": {
+    "comentario": "Credenciais SNMPv3 - PREENCHER COM DADOS REAIS",
+    "username": "renault_monitor",
+    "auth_key": "ALTERAR_SENHA_AUTENTICACAO_AQUI",
+    "priv_key": "ALTERAR_SENHA_PRIVACIDADE_AQUI",
+    "auth_protocol": "SHA",
+    "priv_protocol": "AES"
+  },
+  
+  "coleta_config": {
+    "comentario": "Configurações de coleta SNMP",
+    "timeout_seconds": 3,
+    "max_retries": 3,
+    "cache_ttl_minutes": 5,
+    "max_concurrent_connections": 10,
+    "collection_interval_seconds": 30
+  },
+  
+  "servers": [
+    {
+      "comentario": "Exemplo de servidor HP DL380 Gen8",
+      "device_id": "SRV-HP-001",
+      "ip_address": "10.0.1.1",
+      "generation": "gen8",
+      "location": "DataCenter-Rack-1",
+      "department": "Infraestrutura",
+      "enabled": true
+    },
+    {
+      "comentario": "Exemplo de servidor HP DL380 Gen9",
+      "device_id": "SRV-HP-002",
+      "ip_address": "10.0.1.2",
+      "generation": "gen9",
+      "location": "DataCenter-Rack-1",
+      "department": "Infraestrutura",
+      "enabled": true
+    },
+    {
+      "comentario": "Exemplo de servidor HP DL380 Gen10",
+      "device_id": "SRV-HP-003",
+      "ip_address": "10.0.1.3",
+      "generation": "gen10",
+      "location": "DataCenter-Rack-1",
+      "department": "Infraestrutura",
+      "enabled": true
+    },
+    {
+      "comentario": "Exemplo de VxRail T560F",
+      "device_id": "VXRAIL-01",
+      "ip_address": "10.0.2.1",
+      "generation": "vxrail",
+      "location": "DataCenter-HyperConverged-1",
+      "department": "Infraestrutura",
+      "enabled": true
+    }
+  ],
+  
+  "instrucoes": {
+    "passo_1": "Configurar credenciais SNMPv3 nos servidores HP iLO e VxRail iDRAC",
+    "passo_2": "Preencher o campo 'snmp_credentials' com as credenciais reais",
+    "passo_3": "Adicionar todos os servidores da infraestrutura Renault na lista 'servers'",
+    "passo_4": "Verificar conectividade de rede do servidor Flask para os IPs SNMP",
+    "passo_5": "Testar coleta com: python3 -c 'from snmp_collector import SNMPCollector; c = SNMPCollector(); print(c.collect_all_metrics())'",
+    "passo_6": "Reiniciar aplicação Flask: python3 app_renault_mvp.py"
+  },
+  
+  "referencias": {
+    "hp_ilo_snmp": "https://support.hpe.com/hpesc/public/docDisplay?docId=emr_na-c03334051",
+    "vxrail_idrac_snmp": "https://www.dell.com/support/manuals/en-us/idrac9-lifecycle-controller-v3.3-series/idrac_3.30.30.30_ug/snmp-configuration",
+    "pysnmp_docs": "https://pysnmp.readthedocs.io/"
+  }
+}
