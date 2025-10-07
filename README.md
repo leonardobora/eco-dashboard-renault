@@ -238,9 +238,6 @@ eco-dashboard-renault/
 ├── data_sources/              # Abstração de dados
 ├── tests/                     # Framework de testes
 ├── docs/                      # 📚 Documentação técnica
-│   ├── FLASK_VS_GITHUB_PAGES.md
-│   ├── GITHUB_PAGES_IMPLEMENTATION.md
-│   └── GITHUB_PAGES_QUICKSTART.md
 └── examples/                  # Implementações exemplo
 ```
 
