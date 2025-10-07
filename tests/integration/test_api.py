@@ -3,8 +3,12 @@ Integration tests for Flask application and API endpoints
 """
 
 import json
+import os
 import unittest
 from unittest.mock import patch, MagicMock
+
+# Set testing mode to avoid SNMP timeouts
+os.environ['TESTING'] = '1'
 
 # Mock imports since the app might not be available yet
 try:
