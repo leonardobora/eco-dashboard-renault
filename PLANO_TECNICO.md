@@ -14,27 +14,32 @@
 1. **Infraestrutura Base**
    - Aplicação Flask 2.3.3 completa e funcional
    - Duas versões: Flask (backend) + Estática (GitHub Pages)
-   - API REST em `/api/metrics` com dados em tempo real
+   - API REST completa com 8+ endpoints especializados
    - Template engine Jinja2 com interface rica
 
-2. **Dados Simulados**
-   - 5.376 workstations distribuídas por setores
-   - 90 servidores HP + 10 VxRail (total: 100 servidores)
-   - Consumo médio: 250W por workstation, 400W por servidor
+2. **Escopo Focado em Datacenter**
+   - **100 servidores** no datacenter (90 HP ProLiant + 10 VxRail)
+   - **PUE 2.0** atual → **1.5** target (-25% cooling)
+   - Consumo: HP 400W, VxRail 800W
    - Fator de emissão: 0.0817 kg CO2/kWh (Brasil)
+   - Localização: Complexo Ayrton Senna - São José dos Pinhais
 
-3. **Funcionalidades Existentes**
-   - Monitoramento em tempo real de consumo energético
-   - Cálculo de emissões de CO2 anuais
-   - Análise de economia potencial (workstations ociosas)
-   - Equivalência em árvores plantadas (22 kg CO2/ano por árvore)
+3. **Funcionalidades Datacenter**
+   - Monitoramento em tempo real com PUE
+   - Análise de consolidação via virtualização (30% servidores)
+   - Otimização de cooling e eficiência energética
+   - Recomendações IA para DPM, temperatura, free cooling
+   - Métricas avançadas: utilização por servidor, VM density, workload patterns
    - Suporte a SNMP para coleta real (implementado mas em modo simulado)
 
-4. **Visualizações**
-   - Dashboard interativo com Chart.js
-   - Gráficos de consumo por horário
-   - Métricas ambientais e financeiras
-   - Design system Renault (#FFCB00)
+4. **API REST Avançada**
+   - `/api/servers` - Métricas detalhadas por servidor
+   - `/api/pue` - Power Usage Effectiveness e breakdown
+   - `/api/consolidation` - Análise de consolidação
+   - `/api/virtualization` - Métricas de VMs e densidade
+   - `/api/recommendations` - Recomendações IA para otimização
+   - `/api/savings` - Projeções de economia (consolidação + PUE)
+   - `/api/trends` - Padrões de carga horária do datacenter
 
 ---
 
@@ -52,11 +57,11 @@
 | **Perguntas** | Todos | 4-5min | Preparar respostas técnicas |
 
 ### Pontos-Chave para a Demonstração Técnica:
-- ✅ Mostrar dashboard em tempo real
-- ✅ Destacar cálculos de CO2 e impacto ambiental
-- ✅ Demonstrar API REST funcionando
-- ✅ Apresentar recomendações de IA
-- ✅ Evidenciar facilidade de integração
+- ✅ Mostrar PUE e eficiência do datacenter em tempo real
+- ✅ Destacar potencial de **80% redução** via consolidação + PUE
+- ✅ Demonstrar API REST com métricas avançadas (servidores, virtualização)
+- ✅ Apresentar recomendações de IA focadas em datacenter
+- ✅ Evidenciar ROI claro: **R$185k economia/ano, payback 13 meses**
 
 ---
 
@@ -250,49 +255,55 @@ eco-dashboard-renault/
 
 ---
 
-## 🎤 Roteiro da Demonstração (2 minutos)
+## 🎤 Roteiro da Demonstração (2 minutos) - ATUALIZADO
 
-### Minuto 1: Situação Atual (30s + 30s)
+### Minuto 1: Situação do Datacenter (30s + 30s)
 1. **Abrir dashboard** (5s)
-   - "Este é nosso dashboard EcoTI em tempo real"
+   - "Este é nosso dashboard de sustentabilidade do datacenter Renault"
    
-2. **Mostrar métricas principais** (10s)
-   - "Atualmente a Renault tem 5.376 workstations e 100 servidores"
-   - "Consumo atual: X kW, emitindo Y toneladas de CO2 por ano"
+2. **Mostrar métricas do datacenter** (10s)
+   - "Datacenter com 100 servidores (90 HP ProLiant + 10 VxRail)"
+   - "PUE atual 2.0 - para cada kW de servidores, gastamos 2 kW total"
+   - "Consumo: 44 kW IT + 44 kW cooling = 88 kW total"
    
-3. **Destacar problema** (15s)
-   - "Identificamos 1.176 workstations ociosas (22% da infraestrutura)"
-   - "Isso representa R$ X milhões em desperdício anual"
-   - "Equivalente a Z árvores que precisariam ser plantadas"
+3. **Destacar ineficiências** (15s)
+   - "Identificamos 27 servidores HP com apenas 35% de utilização"
+   - "PUE 2.0 vs. 1.2 das melhores práticas (Google, Microsoft)"
+   - "Isso representa R$ 185k/ano em desperdício energético"
+   - "Equivalente a 25 toneladas de CO2 - 1.136 árvores"
 
-### Minuto 2: Solução e Impacto (60s)
-4. **Demonstrar IA** (20s)
-   - "Nossa IA analisa padrões de uso e identifica oportunidades"
-   - [Clicar em "Recomendações"] "Aqui estão 5 ações prioritárias"
-   - "Sistema sugere desligamento automático fora do horário comercial"
+### Minuto 2: Solução Técnica e ROI (60s)
+4. **Demonstrar análise de IA** (20s)
+   - "Nossa IA identifica 3 oportunidades principais:"
+   - [Mostrar /api/consolidation] "1) Consolidar 27 servidores via VxRail"
+   - [Mostrar /api/pue] "2) Reduzir PUE de 2.0 → 1.5 (otimizando cooling)"
+   - [Mostrar /api/recommendations] "3) DPM automático + temperatura 24°C"
 
-5. **Mostrar otimização** (20s)
-   - [Ativar "Modo Otimizado"] "Com essas medidas implementadas..."
-   - "Redução imediata de 35% no consumo energético"
-   - "Economia de R$ X milhões por ano"
+5. **Mostrar impacto** (20s)
+   - "Resultado: **80% de redução energética**"
+   - "De 1.056 kWh/dia → 211 kWh/dia"
+   - "Economia: R$ 185k/ano com investimento de R$ 200k"
+   - "**Payback: 13 meses** - ROI claro e mensurável"
 
-6. **Impacto ambiental** (15s)
-   - "Redução de Y toneladas de CO2 anualmente"
-   - "Equivalente a plantar Z árvores ou tirar W carros de circulação"
+6. **Narrativa técnica** (15s)
+   - "Consolidação: 100 → 70 servidores (-30%)"
+   - "PUE otimizado: 2.0 → 1.5 (-25% cooling)"
+   - "Redução CO2: 25 ton/ano"
+   - "Alinhado com meta Renault de neutralidade 2040"
 
 7. **Facilidade de implementação** (5s)
-   - "Tudo via API REST, integração simples com infraestrutura existente"
-   - "Implementação gradual, sem interrupção de serviços"
+   - "API REST integra com VMware, SNMP, sistemas existentes"
+   - "Rollout gradual em 4-5 meses, sem downtime"
 
 ---
 
 ## 🧠 Perguntas Técnicas Esperadas e Respostas
 
 ### Q1: "Como vocês coletam os dados em tempo real?"
-**R:** "Utilizamos protocolo SNMP para coletar métricas de servidores e workstations. Para servidores HP e VxRail, já temos suporte nativo. Para workstations, integramos com ferramentas de gestão existentes da Renault como SCCM ou similar. A API é agnóstica e pode consumir dados de múltiplas fontes."
+**R:** "Utilizamos protocolo SNMP para coletar métricas de servidores HP ProLiant e VxRail. Integramos diretamente com iLO (HP) e iDRAC (Dell) para dados de consumo energético em tempo real. Para VMware, conectamos via vSphere API para métricas de virtualização e densidade de VMs. Toda coleta é não-intrusiva."
 
 ### Q2: "Como a IA faz as recomendações?"
-**R:** "Implementamos algoritmos de machine learning que analisam padrões históricos de uso. O sistema aprende os horários de pico, recursos subutilizados e identifica anomalias. Utilizamos modelos de predição para projetar economia futura e priorizar ações com maior impacto."
+**R:** "Analisamos padrões de carga horária (business hours vs. night maintenance), métricas de utilização por servidor, e benchmarks de eficiência (PUE, consolidation ratio). O engine de IA compara com best practices (ASHRAE, Google PUE 1.1) e prioriza ações por ROI: consolidação de VMs de baixa utilização, otimização de temperatura de cooling, e políticas de DPM para horário noturno."
 
 ### Q3: "Quanto tempo leva para implementar na Renault?"
 **R:** "Dividimos em 3 fases: 1) Integração (2-3 semanas) - conectar sistemas existentes; 2) Piloto (1 mês) - teste em setor específico; 3) Rollout (2-3 meses) - expansão gradual. Total: 4-5 meses para implementação completa."
