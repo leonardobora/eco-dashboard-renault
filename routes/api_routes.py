@@ -3,9 +3,13 @@ Additional API routes for EcoTI Dashboard
 Extended endpoints for demonstration and advanced features
 """
 
+import logging
 from flask import Blueprint, jsonify, request
 from data_sources.carbon_data import get_carbon_data_loader
 from ai_engine.recommendations import get_recommendations_engine
+
+# Setup logging
+logger = logging.getLogger(__name__)
 
 # Create blueprint for API routes
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -46,9 +50,10 @@ def get_servers():
             }
         })
     except Exception as e:
+        logger.error(f"Error in get_servers: {str(e)}")
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Internal server error"
         }), 500
 
 
@@ -67,9 +72,10 @@ def get_consolidation_analysis():
             "data": consolidation
         })
     except Exception as e:
+        logger.error(f"Error in get_consolidation_analysis: {str(e)}")
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Internal server error"
         }), 500
 
 
@@ -103,9 +109,10 @@ def get_pue_metrics():
             }
         })
     except Exception as e:
+        logger.error(f"Error in get_pue_metrics: {str(e)}")
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Internal server error"
         }), 500
 
 
@@ -147,9 +154,10 @@ def get_virtualization_metrics():
             }
         })
     except Exception as e:
+        logger.error(f"Error in get_virtualization_metrics: {str(e)}")
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Internal server error"
         }), 500
 
 
@@ -187,9 +195,10 @@ def get_recommendations():
             }
         })
     except Exception as e:
+        logger.error(f"Error in get_recommendations: {str(e)}")
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Internal server error"
         }), 500
 
 
@@ -235,9 +244,10 @@ def get_savings():
             }
         })
     except Exception as e:
+        logger.error(f"Error in get_savings: {str(e)}")
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Internal server error"
         }), 500
 
 
@@ -336,9 +346,10 @@ def get_trends():
             }), 400
             
     except Exception as e:
+        logger.error(f"Error in get_trends: {str(e)}")
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Internal server error"
         }), 500
 
 
