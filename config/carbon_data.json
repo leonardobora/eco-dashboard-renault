@@ -1,0 +1,77 @@
+{
+  "emission_factors": {
+    "brazil_grid": 0.0817,
+    "renewable_energy": 0.0200,
+    "diesel_generator": 0.7500
+  },
+  "infrastructure": {
+    "workstations": {
+      "total": 5376,
+      "avg_consumption_w": 250,
+      "idle_consumption_w": 100,
+      "by_sector": {
+        "engineering": {
+          "count": 1200,
+          "utilization": 0.85
+        },
+        "administration": {
+          "count": 1500,
+          "utilization": 0.70
+        },
+        "production": {
+          "count": 1800,
+          "utilization": 0.90
+        },
+        "quality": {
+          "count": 576,
+          "utilization": 0.75
+        },
+        "logistics": {
+          "count": 300,
+          "utilization": 0.80
+        }
+      }
+    },
+    "servers": {
+      "hp_proliant": {
+        "count": 90,
+        "avg_consumption_w": 400,
+        "utilization": 0.65
+      },
+      "vxrail": {
+        "count": 10,
+        "avg_consumption_w": 800,
+        "utilization": 0.85
+      }
+    }
+  },
+  "carbon_sequestration": {
+    "tree_annual_kg_co2": 22,
+    "area_per_tree_m2": 12
+  },
+  "energy_costs": {
+    "tariff_brl_kwh": 0.60,
+    "peak_multiplier": 1.5,
+    "peak_hours": {
+      "start": 18,
+      "end": 21
+    }
+  },
+  "usage_patterns": {
+    "commercial_hours": {
+      "start": 8,
+      "end": 18,
+      "utilization": 0.80
+    },
+    "reduced_hours": {
+      "start": 19,
+      "end": 22,
+      "utilization": 0.40
+    },
+    "night_hours": {
+      "start": 23,
+      "end": 7,
+      "utilization": 0.20
+    }
+  }
+}

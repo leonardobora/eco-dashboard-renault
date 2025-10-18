@@ -20,7 +20,19 @@ except ImportError as e:
     SNMP_COLLECTOR_AVAILABLE = False
     logger.warning(f"SNMP Collector não disponível: {e}")
 
+# Importar novos módulos
+from data_sources.carbon_data import get_carbon_data_loader
+from ai_engine.recommendations import get_recommendations_engine
+
 app = Flask(__name__)
+
+# Registrar blueprints para novas rotas
+try:
+    from routes.api_routes import api_bp
+    app.register_blueprint(api_bp)
+    logger.info("API routes registradas com sucesso")
+except ImportError as e:
+    logger.warning(f"Não foi possível carregar rotas adicionais: {e}")
 
 
 # Dados simulados da infraestrutura Renault
