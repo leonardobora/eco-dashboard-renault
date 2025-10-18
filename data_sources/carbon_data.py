@@ -183,7 +183,6 @@ class CarbonDataLoader:
         
         # Calculate current state
         total_servers = sum(s["count"] for s in servers.values())
-        total_power_kw = sum(s["count"] * s["power_w"] for s in servers.values()) / 1000
         
         # HP ProLiant consolidation (30% potential)
         hp_data = servers.get("hp_proliant", {})
