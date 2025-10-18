@@ -35,54 +35,66 @@ except ImportError as e:
     logger.warning(f"Não foi possível carregar rotas adicionais: {e}")
 
 
-# Dados simulados da infraestrutura Renault
+# Dados da infraestrutura Renault focada em Datacenter
 class RenaultInfrastructure:
     def __init__(self):
-        self.workstations = 5376
-        self.servidores_hp = 90
-        self.vxrail = 10
-        self.consumo_medio_w = 250
+        # Servidor infrastructure - 100 servidores no datacenter
+        self.servidores_hp = 90  # HP ProLiant DL380 Gen10
+        self.vxrail = 10  # Dell VxRail E560
+        self.poder_hp_w = 400  # Watts por HP ProLiant
+        self.poder_vxrail_w = 800  # Watts por VxRail
+        
+        # Datacenter metrics
+        self.pue_atual = 2.0  # Power Usage Effectiveness atual
+        self.pue_alvo = 1.5  # PUE alvo com otimizações
+        
+        # Fatores ambientais e custos
         self.fator_emissao = 0.0817  # kg CO2/kWh Brasil
         self.sequestro_arvore = 22  # kg CO2/ano por árvore
         self.tarifa_energia = 0.60  # R$/kWh
-
-        # Estado atual simulado
-        self.workstations_ativas = 4200
-        self.servidores_ativos = 85
+        
+        # Load do CarbonDataLoader para dados reais
+        from data_sources.carbon_data import get_carbon_data_loader
+        self.carbon_loader = get_carbon_data_loader()
+        
         self.consumo_atual = self.calcular_consumo_atual()
 
     def calcular_consumo_atual(self):
-        # Simula consumo baseado no horário
+        """Calcula consumo total do datacenter (servidores + cooling via PUE)"""
         hora_atual = datetime.datetime.now().hour
-        if 8 <= hora_atual <= 18:  # Horário comercial
-            fator_uso = 0.8
-        elif 19 <= hora_atual <= 22:  # Horário reduzido
-            fator_uso = 0.4
-        else:  # Madrugada
-            fator_uso = 0.2
-
-        consumo_workstations = (
-            self.workstations_ativas * self.consumo_medio_w * fator_uso / 1000
-        )
-        consumo_servidores = self.servidores_ativos * 400 / 1000  # 400W por servidor
-        return consumo_workstations + consumo_servidores
+        
+        # Usar padrões de carga do carbon_data
+        load_factor = self.carbon_loader.calculate_utilization_factor(hora_atual)
+        
+        # Consumo dos servidores HP (35% utilização média)
+        consumo_hp = self.servidores_hp * self.poder_hp_w * 0.35 * load_factor / 1000
+        
+        # Consumo dos VxRail (65% utilização média)
+        consumo_vxrail = self.vxrail * self.poder_vxrail_w * 0.65 * load_factor / 1000
+        
+        # Total IT equipment
+        consumo_servidores = consumo_hp + consumo_vxrail
+        
+        # Aplicar PUE para incluir cooling, UPS, etc
+        consumo_total_datacenter = consumo_servidores * self.pue_atual
+        
+        return consumo_total_datacenter
 
     def calcular_emissoes_anuais(self):
-        # Consumo anual estimado em kWh
+        """Calcula emissões anuais de CO2 do datacenter"""
         consumo_anual = self.consumo_atual * 24 * 365
         return consumo_anual * self.fator_emissao
 
     def calcular_arvores_equivalentes(self):
+        """Calcula equivalência em árvores para sequestro de CO2"""
         emissoes = self.calcular_emissoes_anuais()
         return int(emissoes / self.sequestro_arvore)
 
     def calcular_economia_potencial(self):
-        # Potencial de economia desligando workstations ociosas
-        workstations_ociosas = self.workstations - self.workstations_ativas
-        economia_kwh = (
-            workstations_ociosas * self.consumo_medio_w * 8 * 250 / 1000
-        )  # 8h/dia, 250 dias/ano
-        return economia_kwh * self.tarifa_energia
+        """Calcula economia potencial com consolidação + PUE otimização"""
+        # Usar dados do carbon_loader
+        optimization = self.carbon_loader.get_optimization_potential()
+        return optimization['annual_savings_brl']
 
 
 # Instância global da infraestrutura
@@ -107,59 +119,51 @@ def dashboard():
 @app.route("/api/metrics")
 def get_metrics():
     """
-    Endpoint de métricas com suporte a SNMP
+    Endpoint principal de métricas do datacenter (servidores apenas)
     
+    Retorna métricas de consumo, PUE, emissões e economia potencial
     Tenta coletar dados via SNMP primeiro, com fallback para dados simulados
     """
-    consumo_servidores_kwh = 0
+    consumo_datacenter_kwh = 0
+    fonte = 'simulado'
     
     # Tentar coletar via SNMP
     if snmp_collector:
         try:
             # Coletar consumo dos servidores via SNMP
             consumo_servidores_kwh, fonte_snmp = snmp_collector.get_total_consumption_kwh()
+            # Aplicar PUE para obter consumo total do datacenter
+            consumo_datacenter_kwh = consumo_servidores_kwh * infra.pue_atual
             fonte = fonte_snmp
-            logger.info(f"Métricas coletadas via SNMP: {consumo_servidores_kwh:.2f} kWh (fonte: {fonte})")
+            logger.info(f"Métricas coletadas via SNMP: {consumo_servidores_kwh:.2f} kWh servidores, {consumo_datacenter_kwh:.2f} kWh total (PUE: {infra.pue_atual})")
         except Exception as e:
             logger.warning(f"Erro na coleta SNMP, usando simulação: {e}")
-            # Fallback para cálculo simulado
-            consumo_servidores_kwh = infra.servidores_ativos * 400 / 1000
+            consumo_datacenter_kwh = infra.calcular_consumo_atual()
             fonte = 'simulado'
     else:
-        # Usar dados simulados (servidor apenas)
-        consumo_servidores_kwh = infra.servidores_ativos * 400 / 1000
-        fonte = 'simulado'
-    
-    # Calcular consumo de workstations (sempre simulado por enquanto)
-    hora_atual = datetime.datetime.now().hour
-    if 8 <= hora_atual <= 18:  # Horário comercial
-        fator_uso = 0.8
-    elif 19 <= hora_atual <= 22:  # Horário reduzido
-        fator_uso = 0.4
-    else:  # Madrugada
-        fator_uso = 0.2
-    
-    consumo_workstations_kwh = (
-        infra.workstations_ativas * infra.consumo_medio_w * fator_uso / 1000
-    )
-    
-    # Consumo total
-    consumo_total_kwh = consumo_workstations_kwh + consumo_servidores_kwh
+        # Usar dados simulados do datacenter
+        consumo_datacenter_kwh = infra.calcular_consumo_atual()
     
     # Atualizar infraestrutura
-    infra.consumo_atual = consumo_total_kwh
+    infra.consumo_atual = consumo_datacenter_kwh
+    
+    # Obter dados de otimização
+    optimization = infra.carbon_loader.get_optimization_potential()
+    consolidation = infra.carbon_loader.get_consolidation_potential()
     
     return jsonify(
         {
-            "consumo_atual": consumo_total_kwh,
-            "emissoes_co2": infra.calcular_emissoes_anuais(),
-            "economia_potencial": infra.calcular_economia_potencial(),
+            "consumo_atual": round(consumo_datacenter_kwh, 2),
+            "emissoes_co2": round(infra.calcular_emissoes_anuais(), 2),
+            "economia_potencial": round(infra.calcular_economia_potencial(), 2),
             "arvores_equivalentes": infra.calcular_arvores_equivalentes(),
-            "fonte": fonte,  # Novo campo indicando fonte dos dados
-            "detalhes_fonte": {
-                "servidores": fonte,
-                "workstations": "simulado"
-            }
+            "pue_atual": infra.pue_atual,
+            "pue_alvo": infra.pue_alvo,
+            "servidores_total": infra.servidores_hp + infra.vxrail,
+            "consolidacao_potencial": consolidation['servers_to_consolidate'],
+            "reducao_percentual": round(optimization['reduction_percentage'], 1),
+            "fonte": fonte,
+            "escopo": "datacenter-servidores-apenas"
         }
     )
 
