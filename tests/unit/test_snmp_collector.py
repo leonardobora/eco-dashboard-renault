@@ -236,7 +236,7 @@ class TestFlaskIntegration(unittest.TestCase):
             self.fail(f"Failed to import Flask app: {e}")
 
     def test_api_metrics_endpoint_with_fonte(self):
-        """Test that /api/metrics includes fonte field"""
+        """Test that /api/metrics includes fonte field and datacenter metrics"""
         try:
             import app_renault_mvp
             
@@ -252,10 +252,12 @@ class TestFlaskIntegration(unittest.TestCase):
             self.assertIn('fonte', data)
             self.assertIn(data['fonte'], ['snmp_real', 'cached', 'simulado', 'mixed'])
             
-            # Verify detalhes_fonte exists
-            self.assertIn('detalhes_fonte', data)
-            self.assertIn('servidores', data['detalhes_fonte'])
-            self.assertIn('workstations', data['detalhes_fonte'])
+            # Verify datacenter-specific fields (new scope)
+            self.assertIn('escopo', data)
+            self.assertEqual(data['escopo'], 'datacenter-servidores-apenas')
+            self.assertIn('pue_atual', data)
+            self.assertIn('pue_alvo', data)
+            self.assertIn('servidores_total', data)
             
             # Verify backward compatibility - old fields still exist
             self.assertIn('consumo_atual', data)
