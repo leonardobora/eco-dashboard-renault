@@ -116,6 +116,12 @@ def dashboard():
     return render_template("dashboard.html")
 
 
+@app.route("/dashboard")
+def dashboard_new():
+    """Nova página de dashboard com métricas em tempo real e visualizações interativas"""
+    return render_template("dashboard_new.html")
+
+
 @app.route("/api/metrics")
 def get_metrics():
     """
