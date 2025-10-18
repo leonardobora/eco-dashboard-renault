@@ -89,53 +89,53 @@ class RecommendationsEngine:
     
     def detect_idle_resources(self) -> List[Dict]:
         """
-        Detect idle or underutilized resources
+        Detect idle or underutilized server resources
         
         Returns:
             List of idle resource detections
         """
-        workstation_data = self.carbon_loader.get_workstation_data()
-        sectors = self.carbon_loader.get_sector_consumption()
+        server_metrics = self.carbon_loader.get_server_metrics()
         
         idle_resources = []
         
-        # Analyze each sector for low utilization
-        for sector in sectors:
-            if sector["utilization"] < 0.75:  # Below 75% utilization
+        # Analyze each server type for low utilization
+        for server in server_metrics:
+            if server["utilization_percent"] < 50:  # Below 50% utilization
                 idle_resources.append({
-                    "resource_type": "workstations",
-                    "sector": sector["name"],
-                    "count": sector["workstations"],
-                    "current_utilization": sector["utilization"],
-                    "waste_percentage": round((1 - sector["utilization"]) * 100, 1),
-                    "potential_savings_kwh": sector["annual_consumption_kwh"] * (0.75 - sector["utilization"])
+                    "resource_type": "servers",
+                    "server_type": server["type"],
+                    "model": server["model"],
+                    "count": server["count"],
+                    "current_utilization": server["utilization_percent"],
+                    "waste_percentage": round((50 - server["utilization_percent"]), 1),
+                    "potential_savings_kwh": server["annual_consumption_kwh"] * ((50 - server["utilization_percent"]) / 100)
                 })
         
         return idle_resources
     
     def get_all_recommendations(self) -> List[Dict]:
         """
-        Generate all AI-powered recommendations
+        Generate all AI-powered recommendations for datacenter optimization
         
         Returns:
             List of recommendations sorted by priority
         """
         recommendations = []
         
-        # 1. Automatic shutdown recommendations
-        recommendations.extend(self._get_shutdown_recommendations())
+        # 1. Virtualization and consolidation
+        recommendations.extend(self._get_virtualization_recommendations())
         
-        # 2. Scheduling optimization
-        recommendations.extend(self._get_scheduling_recommendations())
+        # 2. PUE optimization
+        recommendations.extend(self._get_pue_optimization_recommendations())
         
-        # 3. Infrastructure optimization
-        recommendations.extend(self._get_infrastructure_recommendations())
+        # 3. Resource scaling
+        recommendations.extend(self._get_resource_scaling_recommendations())
         
-        # 4. Renewable energy recommendations
-        recommendations.extend(self._get_renewable_recommendations())
-        
-        # 5. Cooling optimization
+        # 4. Cooling datacenter optimization
         recommendations.extend(self._get_cooling_recommendations())
+        
+        # 5. Renewable energy recommendations
+        recommendations.extend(self._get_renewable_recommendations())
         
         # Sort by priority (critical -> high -> medium -> low)
         priority_order = {
@@ -149,151 +149,225 @@ class RecommendationsEngine:
         
         return [r.to_dict() for r in recommendations]
     
-    def _get_shutdown_recommendations(self) -> List[Recommendation]:
-        """Generate recommendations for automatic shutdown"""
+    def _get_virtualization_recommendations(self) -> List[Recommendation]:
+        """Generate recommendations for virtualization and server consolidation"""
         recommendations = []
         
-        opt_data = self.carbon_loader.get_optimization_potential()
+        consolidation = self.carbon_loader.get_consolidation_potential()
+        
+        if consolidation["servers_to_consolidate"] > 0:
+            rec = Recommendation(
+                title=f"Consolidar {consolidation['servers_to_consolidate']} Servidores HP ProLiant via Virtualização",
+                description=f"Identificamos {consolidation['servers_to_consolidate']} servidores HP ProLiant "
+                           f"com baixa utilização (35%). Consolidando cargas de trabalho para os VxRail "
+                           f"existentes, podemos reduzir o consumo em {consolidation['reduction_percent']:.1f}%. "
+                           f"Economia estimada: R$ {consolidation['cost_savings_brl']:,.2f}/ano.",
+                category=RecommendationCategory.INFRASTRUCTURE,
+                priority=RecommendationPriority.HIGH,
+                impact_kwh=consolidation['energy_savings_kwh'],
+                impact_co2_kg=consolidation['co2_reduction_kg'],
+                impact_brl=consolidation['cost_savings_brl'],
+                implementation_effort="Alto - Requer planejamento e migração de VMs",
+                estimated_time="2-3 meses"
+            )
+            recommendations.append(rec)
+        
+        # VM auto-scaling recommendation
+        server_metrics = self.carbon_loader.get_server_metrics()
+        vxrail = next((s for s in server_metrics if s["type"] == "vxrail"), None)
+        
+        if vxrail and vxrail["vm_density"] > 0:
+            estimated_savings_kwh = vxrail["annual_consumption_kwh"] * 0.15  # 15% savings
+            estimated_co2 = estimated_savings_kwh * self.carbon_loader.get_emission_factor()
+            estimated_brl = estimated_savings_kwh * self.carbon_loader.get_energy_costs().get("base_rate_brl_per_kwh", 0.60)
+            
+            rec = Recommendation(
+                title="Implementar Auto-Scaling de VMs em Horários de Baixa Demanda",
+                description=f"VMs em VxRail mantêm recursos alocados 24/7. Implementar políticas de "
+                           f"auto-scaling pode reduzir alocação de CPU/RAM em 40% durante período "
+                           f"noturno (23h-7h), economizando 15% do consumo total dos VxRails.",
+                category=RecommendationCategory.AUTOMATION,
+                priority=RecommendationPriority.MEDIUM,
+                impact_kwh=estimated_savings_kwh,
+                impact_co2_kg=estimated_co2,
+                impact_brl=estimated_brl,
+                implementation_effort="Médio - Configuração de políticas DPM",
+                estimated_time="3-4 semanas"
+            )
+            recommendations.append(rec)
+        
+        return recommendations
+    
+    def _get_pue_optimization_recommendations(self) -> List[Recommendation]:
+        """Generate recommendations for PUE optimization"""
+        recommendations = []
+        
+        cooling = self.carbon_loader.get_cooling_efficiency()
+        datacenter = self.carbon_loader.get_datacenter_data()
+        
+        # Temperature setpoint adjustment
+        temp_savings_kwh = cooling["annual_savings_kwh"] * 0.30  # 30% from temp adjustment
+        temp_co2 = temp_savings_kwh * self.carbon_loader.get_emission_factor()
+        temp_brl = temp_savings_kwh * self.carbon_loader.get_energy_costs().get("base_rate_brl_per_kwh", 0.60)
+        
+        current_temp = datacenter.get("temperature_setpoint_c", 22)
         
         rec = Recommendation(
-            title="Implementar Desligamento Automático de Workstations Ociosas",
-            description=f"Identificamos {opt_data['optimizable_workstations']} workstations "
-                       f"que ficam ligadas fora do horário comercial sem uso. Implementar "
-                       f"desligamento automático pode reduzir o consumo em {opt_data['reduction_percentage']:.0f}%.",
+            title=f"Aumentar Temperatura do Datacenter de {current_temp}°C para 24°C",
+            description=f"Temperatura atual ({current_temp}°C) está abaixo das recomendações ASHRAE (24-27°C). "
+                       f"Aumentar setpoint para 24°C pode reduzir consumo de cooling em até 10%, "
+                       f"representando economia de {temp_savings_kwh:,.0f} kWh/ano sem impacto nos equipamentos.",
+            category=RecommendationCategory.ENERGY_SAVINGS,
+            priority=RecommendationPriority.HIGH,
+            impact_kwh=temp_savings_kwh,
+            impact_co2_kg=temp_co2,
+            impact_brl=temp_brl,
+            implementation_effort="Baixo - Ajuste de configuração CRAC",
+            estimated_time="1 semana"
+        )
+        recommendations.append(rec)
+        
+        # Hot/Cold aisle containment
+        containment_savings_kwh = cooling["annual_savings_kwh"] * 0.40  # 40% from containment
+        containment_co2 = containment_savings_kwh * self.carbon_loader.get_emission_factor()
+        containment_brl = containment_savings_kwh * self.carbon_loader.get_energy_costs().get("base_rate_brl_per_kwh", 0.60)
+        
+        rec = Recommendation(
+            title="Implementar Hot/Cold Aisle Containment",
+            description="Segregar corredores quentes e frios com painéis de contenção melhora "
+                       "eficiência do fluxo de ar e reduz mistura de temperaturas. Pode reduzir "
+                       "consumo de cooling em 15-20%, melhorando PUE de 2.0 para 1.6.",
+            category=RecommendationCategory.INFRASTRUCTURE,
+            priority=RecommendationPriority.MEDIUM,
+            impact_kwh=containment_savings_kwh,
+            impact_co2_kg=containment_co2,
+            impact_brl=containment_brl,
+            implementation_effort="Médio - Instalação física de painéis",
+            estimated_time="1-2 meses"
+        )
+        recommendations.append(rec)
+        
+        return recommendations
+    
+    def _get_resource_scaling_recommendations(self) -> List[Recommendation]:
+        """Generate resource scaling and DPM recommendations"""
+        recommendations = []
+        
+        # Get server consumption
+        consumption = self.carbon_loader.get_datacenter_consumption()
+        
+        # Estimate savings from night-time scaling (23h-7h = 8 hours)
+        night_hours = 8
+        night_reduction = 0.40  # 40% reduction during night
+        daily_night_savings_kwh = consumption["total_kwh"] * night_reduction * (night_hours / 24)
+        annual_savings_kwh = daily_night_savings_kwh * 365
+        
+        savings_co2 = annual_savings_kwh * self.carbon_loader.get_emission_factor()
+        savings_brl = annual_savings_kwh * self.carbon_loader.get_energy_costs().get("base_rate_brl_per_kwh", 0.60)
+        
+        rec = Recommendation(
+            title="Implementar DPM (Distributed Power Management) para Horário Noturno",
+            description="Reduzir alocação de CPU/RAM em 40% durante período noturno (23h-7h) "
+                       "quando carga é apenas 15%. Implementar políticas de DPM em VMware para "
+                       "colocar hosts em standby ou low-power mode automaticamente.",
             category=RecommendationCategory.AUTOMATION,
             priority=RecommendationPriority.HIGH,
-            impact_kwh=opt_data['annual_savings_kwh'],
-            impact_co2_kg=opt_data['co2_reduction_kg'],
-            impact_brl=opt_data['annual_savings_brl'],
-            implementation_effort="Médio - Requer configuração de políticas de grupo",
+            impact_kwh=annual_savings_kwh,
+            impact_co2_kg=savings_co2,
+            impact_brl=savings_brl,
+            implementation_effort="Médio - Configuração vSphere DRS/DPM",
             estimated_time="2-3 semanas"
         )
         recommendations.append(rec)
         
         return recommendations
     
-    def _get_scheduling_recommendations(self) -> List[Recommendation]:
-        """Generate recommendations for task scheduling optimization"""
-        recommendations = []
-        
-        energy_costs = self.carbon_loader.get_energy_costs()
-        
-        # Estimate impact of avoiding peak hours
-        peak_hours_duration = 3  # 18:00 to 21:00
-        daily_peak_consumption = 500  # kW estimated
-        annual_peak_kwh = daily_peak_consumption * peak_hours_duration * 250  # working days
-        peak_extra_cost = annual_peak_kwh * energy_costs['tariff_brl_kwh'] * (energy_costs['peak_multiplier'] - 1)
-        
-        rec = Recommendation(
-            title="Agendar Tarefas Pesadas Fora do Horário de Pico",
-            description="Processos de alta carga (backups, compilações, relatórios) estão sendo "
-                       "executados durante o horário de pico (18h-21h), quando a energia é 50% "
-                       "mais cara. Recomendamos agendar para madrugada (23h-6h).",
-            category=RecommendationCategory.COST_OPTIMIZATION,
-            priority=RecommendationPriority.MEDIUM,
-            impact_kwh=0,  # Same consumption, different cost
-            impact_co2_kg=0,
-            impact_brl=peak_extra_cost,
-            implementation_effort="Baixo - Ajuste de agendamento de tarefas",
-            estimated_time="1 semana"
-        )
-        recommendations.append(rec)
-        
-        return recommendations
-    
-    def _get_infrastructure_recommendations(self) -> List[Recommendation]:
-        """Generate infrastructure optimization recommendations"""
-        recommendations = []
-        
-        server_data = self.carbon_loader.get_server_data()
-        
-        # Check for underutilized servers
-        for server_type, data in server_data.items():
-            if data['utilization'] < 0.70:
-                potential_savings_kwh = (data['count'] * data['avg_consumption_w'] * 
-                                        (0.70 - data['utilization']) * 24 * 365) / 1000
-                
-                rec = Recommendation(
-                    title=f"Consolidar Cargas de Trabalho - {server_type.replace('_', ' ').title()}",
-                    description=f"Servidores {server_type} estão com utilização de apenas "
-                               f"{data['utilization']*100:.0f}%. Consolidar VMs e containers pode "
-                               f"reduzir o número de servidores físicos necessários.",
-                    category=RecommendationCategory.INFRASTRUCTURE,
-                    priority=RecommendationPriority.MEDIUM,
-                    impact_kwh=potential_savings_kwh,
-                    impact_co2_kg=potential_savings_kwh * self.carbon_loader.get_emission_factor(),
-                    impact_brl=potential_savings_kwh * self.carbon_loader.get_energy_costs()['tariff_brl_kwh'],
-                    implementation_effort="Alto - Requer planejamento e migração de cargas",
-                    estimated_time="2-3 meses"
-                )
-                recommendations.append(rec)
-        
-        return recommendations
-    
     def _get_renewable_recommendations(self) -> List[Recommendation]:
-        """Generate renewable energy recommendations"""
+        """Generate renewable energy recommendations for datacenter"""
         recommendations = []
         
-        # Calculate potential impact of solar panels
-        workstation_data = self.carbon_loader.get_workstation_data()
-        total_consumption_kwh = (workstation_data['total'] * workstation_data['avg_consumption_w'] 
-                                * 0.75 * 24 * 365) / 1000  # 75% avg utilization
+        # Calculate datacenter consumption
+        consumption = self.carbon_loader.get_datacenter_consumption()
+        annual_consumption_kwh = consumption["total_kwh"] * 24 * 365
         
-        # Assume solar could provide 20% of energy needs
-        solar_potential_kwh = total_consumption_kwh * 0.20
+        # Solar could provide 100kW capacity (target from config)
+        datacenter = self.carbon_loader.get_datacenter_data()
+        solar_capacity_kw = datacenter.get("renewable_target_kw", 100)
+        
+        # Estimate annual generation (capacity factor ~15% for Brazil)
+        solar_annual_kwh = solar_capacity_kw * 24 * 365 * 0.15
         
         # CO2 reduction from switching to renewable
-        current_emissions = solar_potential_kwh * self.carbon_loader.get_emission_factor('brazil_grid')
-        renewable_emissions = solar_potential_kwh * self.carbon_loader.get_emission_factor('renewable_energy')
+        current_emissions = solar_annual_kwh * self.carbon_loader.get_emission_factor('grid_brazil')
+        renewable_emissions = solar_annual_kwh * self.carbon_loader.get_emission_factor('renewable')
         co2_reduction = current_emissions - renewable_emissions
         
+        # Investment and payback
+        solar_brl_savings = solar_annual_kwh * self.carbon_loader.get_energy_costs().get("base_rate_brl_per_kwh", 0.60)
+        investment_brl = solar_capacity_kw * 4000  # R$4k per kW installed
+        payback_months = int((investment_brl / solar_brl_savings) * 12) if solar_brl_savings > 0 else 0
+        
         rec = Recommendation(
-            title="Implementar Energia Solar Fotovoltaica no Telhado",
-            description="Instalação de painéis solares pode suprir 20% da demanda energética da TI. "
-                       "Com o custo atual da energia, o payback é estimado em 4-5 anos, com "
-                       "redução significativa de emissões de CO2.",
+            title=f"Instalar {solar_capacity_kw}kW de Energia Solar no Telhado do Datacenter",
+            description=f"Instalação de {solar_capacity_kw}kW em painéis solares pode suprir ~{solar_annual_kwh/annual_consumption_kwh*100:.0f}% "
+                       f"da demanda do datacenter. Investimento: R$ {investment_brl:,.0f}, "
+                       f"Payback: {payback_months} meses. Reduz dependência da rede e emissões de CO2.",
             category=RecommendationCategory.CARBON_REDUCTION,
             priority=RecommendationPriority.LOW,
-            impact_kwh=solar_potential_kwh,
+            impact_kwh=solar_annual_kwh,
             impact_co2_kg=co2_reduction,
-            impact_brl=solar_potential_kwh * self.carbon_loader.get_energy_costs()['tariff_brl_kwh'] * 0.80,  # 80% savings after installation
-            implementation_effort="Muito Alto - Investimento em infraestrutura física",
-            estimated_time="6-12 meses"
+            impact_brl=solar_brl_savings,
+            implementation_effort="Muito Alto - CAPEX R$ 400k, instalação física",
+            estimated_time="6-8 meses"
         )
         recommendations.append(rec)
         
         return recommendations
     
     def _get_cooling_recommendations(self) -> List[Recommendation]:
-        """Generate cooling optimization recommendations"""
+        """Generate datacenter cooling optimization recommendations"""
         recommendations = []
         
-        # Estimate cooling represents 40% of datacenter energy
-        server_data = self.carbon_loader.get_server_data()
-        total_server_consumption = sum(
-            data['count'] * data['avg_consumption_w'] 
-            for data in server_data.values()
-        )
+        cooling = self.carbon_loader.get_cooling_efficiency()
         
-        # Cooling consumption
-        cooling_consumption_w = total_server_consumption * 0.40
-        annual_cooling_kwh = (cooling_consumption_w * 24 * 365) / 1000
-        
-        # Potential 15% savings with optimization
-        savings_kwh = annual_cooling_kwh * 0.15
+        # Free cooling recommendation
+        free_cooling_savings_kwh = cooling["annual_savings_kwh"] * 0.20  # 20% from free cooling
+        free_cooling_co2 = free_cooling_savings_kwh * self.carbon_loader.get_emission_factor()
+        free_cooling_brl = free_cooling_savings_kwh * self.carbon_loader.get_energy_costs().get("base_rate_brl_per_kwh", 0.60)
         
         rec = Recommendation(
-            title="Otimizar Sistema de Refrigeração do Datacenter",
-            description="Ajustar temperaturas de operação para 25°C (atualmente 21°C) e "
-                       "implementar corredores quentes/frios pode reduzir consumo de refrigeração "
-                       "em até 15%, conforme padrões ASHRAE.",
+            title="Implementar Free Cooling em Meses de Inverno (Jun-Ago)",
+            description="São José dos Pinhais tem temperaturas de 10-15°C no inverno. "
+                       "Implementar economizadores de ar externo (air-side economizers) pode "
+                       "reduzir uso de CRAC em até 60% nos meses frios, economizando 8-10% "
+                       "do consumo anual de cooling.",
             category=RecommendationCategory.ENERGY_SAVINGS,
-            priority=RecommendationPriority.HIGH,
-            impact_kwh=savings_kwh,
-            impact_co2_kg=savings_kwh * self.carbon_loader.get_emission_factor(),
-            impact_brl=savings_kwh * self.carbon_loader.get_energy_costs()['tariff_brl_kwh'],
-            implementation_effort="Médio - Ajustes de configuração e organização física",
-            estimated_time="1-2 meses"
+            priority=RecommendationPriority.MEDIUM,
+            impact_kwh=free_cooling_savings_kwh,
+            impact_co2_kg=free_cooling_co2,
+            impact_brl=free_cooling_brl,
+            implementation_effort="Alto - Modificação de infraestrutura HVAC",
+            estimated_time="3-4 meses"
+        )
+        recommendations.append(rec)
+        
+        # Sensor granularity
+        sensor_savings_kwh = cooling["annual_savings_kwh"] * 0.10  # 10% from better monitoring
+        sensor_co2 = sensor_savings_kwh * self.carbon_loader.get_emission_factor()
+        sensor_brl = sensor_savings_kwh * self.carbon_loader.get_energy_costs().get("base_rate_brl_per_kwh", 0.60)
+        
+        rec = Recommendation(
+            title="Instalar Sensores de Temperatura Granulares (por Rack)",
+            description="Monitoramento atual é macro (sala toda). Instalar sensores por rack "
+                       "permite identificar hot spots e ajustar cooling de forma localizada, "
+                       "evitando super-resfriamento de áreas com baixa carga térmica.",
+            category=RecommendationCategory.INFRASTRUCTURE,
+            priority=RecommendationPriority.LOW,
+            impact_kwh=sensor_savings_kwh,
+            impact_co2_kg=sensor_co2,
+            impact_brl=sensor_brl,
+            implementation_effort="Baixo - Instalação de sensores IoT",
+            estimated_time="2-3 semanas"
         )
         recommendations.append(rec)
         

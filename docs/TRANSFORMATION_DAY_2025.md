@@ -48,56 +48,102 @@ Criar uma solução tecnológica que permita **monitorar, analisar e otimizar** 
 - **Migração de 70%** dos workloads para cloud
 - **Implementação de 100%** de monitoramento energético inteligente
 
-## 🏢 Infraestrutura Atual Renault (Simulada)
+## 🏢 Infraestrutura Datacenter Renault (Foco Atualizado)
 
-### Workstations
+### Decisão Estratégica
+**De:** Solução focada em workstations (5.376) + servidores (100)  
+**Para:** Solução focada **APENAS em servidores do datacenter** (100 unidades)
+
+**Por quê?**
+- ✅ Viabilidade técnica superior (controle centralizado pela TI)
+- ✅ ROI mais claro (R$200k investimento, R$185k/ano economia, payback 13 meses)
+- ✅ Narrativa técnica para público especializado (PUE, virtualização, DPM)
+- ✅ Impacto impressionante: **80% de redução energética** potencial
+
+### Servidores Datacenter
 ```
-Total: 5.376 estações de trabalho
-Distribuição por departamento:
-├── Administrativo: 1.200 (22%)
-├── Engenharia: 1.500 (28%)
-├── Produção: 1.800 (33%)
-├── Vendas: 600 (11%)
-└── Suporte: 276 (6%)
+HP ProLiant DL380 Gen10: 90 unidades
+├── Potência: 400W por servidor
+├── CPU: Intel Xeon Silver 4214
+├── RAM: 64GB por servidor
+├── Storage: 4TB por servidor
+├── Virtualização: VMware ESXi 7.0
+└── Utilização média: 35% (subutilizado)
 
-Consumo médio: 250W por workstation
-Utilização variável: 20-80% por horário
-```
+Dell VxRail E560: 10 sistemas
+├── Potência: 800W por sistema
+├── CPU: Intel Xeon Gold 6248
+├── RAM: 512GB por sistema
+├── Storage: 20TB por sistema
+├── Virtualização: vSphere 7.0
+├── VM Density: 45 VMs por host
+└── Utilização média: 65%
 
-### Servidores
-```
-Servidores HP: 90 unidades
-├── Aplicações: 40 servidores
-├── Banco de dados: 25 servidores
-├── Web/API: 15 servidores
-└── Backup/Storage: 10 servidores
-
-VxRail (Hiperconvergência): 10 sistemas
-├── Virtualização: 6 VxRail
-├── Container Platform: 2 VxRail
-├── Big Data/Analytics: 1 VxRail
-└── DR/Backup: 1 VxRail
-
-Consumo médio: 400W (HP) / 1000W (VxRail)
-Utilização: 90% constante (servidores)
-```
-
-### Data Centers
-```
-Localização: 2 data centers principais
-├── São Bernardo do Campo (Principal): 80%
-└── Backup/DR (Remoto): 20%
-
-Infraestrutura de apoio:
-├── Refrigeração: 35% do consumo total
-├── UPS/Energia: 10% do consumo total
-├── Iluminação: 5% do consumo total
-└── Segurança/Monitoramento: 5% do consumo total
+Total: 100 servidores
+Consumo IT: 44 kW
+PUE atual: 2.0 (cooling ineficiente)
+Consumo total: 88 kW (44 kW IT + 44 kW overhead)
 ```
 
-## 📊 Métricas de Referência
+### Datacenter Principal
+```
+Localização: Complexo Ayrton Senna - São José dos Pinhais
+Cooling: CRAC (Computer Room Air Conditioning)
+Capacidade: 500.000 BTU
+Temperatura setpoint: 22°C (pode otimizar para 24°C)
 
-### Baseline Energético
+PUE (Power Usage Effectiveness):
+├── Atual: 2.0 (para cada 1 kW IT, gasta 2 kW total)
+├── Target: 1.5 (com otimizações)
+├── Best Practice: 1.2 (Google, Microsoft Azure)
+└── Breakdown: 50% IT, 50% cooling/overhead
+
+Workload Patterns:
+├── Business hours (7h-19h): 75% carga
+├── Extended hours (19h-23h): 40% carga
+└── Night maintenance (23h-7h): 15% carga
+```
+
+## 📊 Métricas de Referência (Novo Escopo)
+
+### Cenário Atual (Baseline)
+```
+Servidores: 100 (90 HP + 10 VxRail)
+Consumo IT: 44 kW
+PUE: 2.0
+Consumo Total: 88 kW
+Diário: 1.056 kWh (24h)
+Anual: 385.440 kWh
+Custo: R$ 633,60/dia → R$ 231k/ano
+CO₂: 86,3 kg/dia → 31,5 ton/ano
+```
+
+### Cenário Otimizado (Target)
+```
+Consolidação: 100 → 70 servidores (-30%)
+PUE otimizado: 2.0 → 1.5 (-25% cooling)
+Consumo IT: 30,8 kW (após consolidação)
+Consumo Total: 46,2 kW (com PUE 1.5)
+Diário: 211 kWh (24h) → **-80% vs. baseline!**
+Anual: 77.015 kWh
+Economia: R$ 506,88/dia → R$ 185k/ano
+Redução CO₂: 69 kg/dia → 25 ton/ano
+```
+
+### ROI Claro
+```
+Investimento: R$ 200.000
+- Migração VMs: R$ 80k (serviços)
+- Hot/Cold aisle: R$ 60k (painéis)
+- Sensores IoT: R$ 30k (temperatura)
+- Ajustes HVAC: R$ 30k (free cooling setup)
+
+Economia anual: R$ 185.000
+Payback: 13 meses
+ROI 5 anos: 362% (R$ 725k economia)
+```
+
+### Baseline Energético Original (Referência)
 ```
 Consumo Total Estimado: 1.500 kWh/hora
 ├── Workstations: 1.100 kWh/hora (73%)
