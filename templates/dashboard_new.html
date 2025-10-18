@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard EcoTI - Renault Transformation Day 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 50%, #cffafe 100%);
+            min-height: 100vh;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 64px;
+            height: 64px;
+            border: 4px solid #10b981;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Error State */
+        .error-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fef2f2 0%, #fed7aa 100%);
+        }
+
+        .error-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 32px;
+            max-width: 448px;
+            text-align: center;
+        }
+
+        .error-icon {
+            font-size: 60px;
+            margin-bottom: 16px;
+        }
+
+        .error-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .error-message {
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .retry-button {
+            padding: 8px 24px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .retry-button:hover {
+            background: #059669;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            font-size: 32px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            color: #6b7280;
+            text-transform: capitalize;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            transition: box-shadow 0.3s;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .metric-icon {
+            font-size: 36px;
+        }
+
+        .metric-trend {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .trend-emerald {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .trend-teal {
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+        }
+
+        .trend-cyan {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        }
+
+        .trend-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        }
+
+        .metric-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .metric-target {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .stat-row:not(:last-child) {
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .stat-label {
+            color: #6b7280;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .stat-total {
+            padding-top: 12px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .stat-total .stat-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .stat-total .stat-value {
+            color: #10b981;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .progress-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-emerald {
+            background: #10b981;
+        }
+
+        .progress-orange {
+            background: #f97316;
+        }
+
+        /* Impact Section */
+        .impact-section {
+            background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            color: white;
+        }
+
+        .impact-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .impact-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .impact-label {
+            font-size: 14px;
+            color: #d1fae5;
+            margin-bottom: 4px;
+        }
+
+        .impact-value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading State -->
+    <div id="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Carregando dashboard...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="error-container hidden">
+        <div class="error-card">
+            <div class="error-icon">⚠️</div>
+            <h1 class="error-title">Erro ao Carregar</h1>
+            <p class="error-message" id="errorMessage">Não foi possível carregar os dados do dashboard.</p>
+            <button class="retry-button" onclick="window.location.reload()">Tentar Novamente</button>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="header-icon">🌱</div>
+                    <div>
+                        <h1 class="header-title">Dashboard EcoTI</h1>
+                        <p class="header-subtitle">Renault Transformation Day 2025</p>
+                    </div>
+                </div>
+                <div class="header-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text" id="dataSource">live</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Métricas Principais - Grid 2x2 -->
+            <div class="metrics-grid">
+                <!-- PUE Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">⚡</div>
+                        <div class="metric-trend trend-emerald">+<span id="pueTrend">0</span>%</div>
+                    </div>
+                    <h3 class="metric-title">PUE Atual</h3>
+                    <p class="metric-value" id="pueValue">--</p>
+                    <p class="metric-target" id="pueTarget">Meta: --</p>
+                </div>
+
+                <!-- Consolidação Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">🖥️</div>
+                        <div class="metric-trend trend-teal">+<span id="consolidationTrend">0</span>%</div>
+                    </div>
+                    <h3 class="metric-title">Consolidação</h3>
+                    <p class="metric-value" id="consolidationValue">100 → 70</p>
+                    <p class="metric-target" id="consolidationTarget">30% redução</p>
+                </div>
+
+                <!-- Energia Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">🔋</div>
+                        <div class="metric-trend trend-cyan">+<span id="energyTrend">80</span>%</div>
+                    </div>
+                    <h3 class="metric-title">Economia Energia</h3>
+                    <p class="metric-value" id="energyValue">80%</p>
+                    <p class="metric-target" id="energyTarget">-- kWh/ano</p>
+                </div>
+
+                <!-- Custo Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-trend trend-green">+<span id="costTrend">100</span>%</div>
+                    </div>
+                    <h3 class="metric-title">Economia Anual</h3>
+                    <p class="metric-value" id="costValue">R$ 185.000</p>
+                    <p class="metric-target" id="costTarget">ROI: 13 meses</p>
+                </div>
+            </div>
+
+            <!-- Gráficos Detalhados -->
+            <div class="charts-grid">
+                <!-- Server Stats -->
+                <div class="chart-card">
+                    <h2 class="chart-title">Servidores Ativos</h2>
+                    <div id="serverStats">
+                        <div class="stat-row">
+                            <span class="stat-label">HP ProLiant DL380</span>
+                            <span class="stat-value" id="hpCount">--</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Dell VxRail E560</span>
+                            <span class="stat-value" id="vxrailCount">--</span>
+                        </div>
+                        <div class="stat-row stat-total">
+                            <span class="stat-label">Total</span>
+                            <span class="stat-value" id="totalServers">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PUE Breakdown -->
+                <div class="chart-card">
+                    <h2 class="chart-title">Breakdown PUE</h2>
+                    <div id="pueBreakdown">
+                        <div class="progress-container">
+                            <div class="progress-header">
+                                <span class="progress-label">Servidores</span>
+                                <span class="progress-value" id="serversKwh">-- kWh</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill progress-emerald" id="serversProgress" style="width: 50%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-header">
+                                <span class="progress-label">Cooling</span>
+                                <span class="progress-value" id="coolingKwh">-- kWh</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill progress-orange" id="coolingProgress" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Summary -->
+            <div class="impact-section">
+                <h2 class="impact-title">💚 Impacto Ambiental e Econômico</h2>
+                <div class="impact-grid">
+                    <div class="impact-item">
+                        <p class="impact-label">Redução de CO₂</p>
+                        <p class="impact-value" id="co2Reduction">-- ton/ano</p>
+                    </div>
+                    <div class="impact-item">
+                        <p class="impact-label">Economia de Energia</p>
+                        <p class="impact-value" id="energySavings">-- MWh/ano</p>
+                    </div>
+                    <div class="impact-item">
+                        <p class="impact-label">Redução de Custos</p>
+                        <p class="impact-value" id="costSavings">R$ --k/ano</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // State management
+        let dashboardData = {
+            servers: [],
+            pue: null,
+            consolidation: null,
+            savings: null,
+            trends: [],
+            health: null
+        };
+
+        // Fetch all dashboard data
+        async function fetchDashboardData() {
+            try {
+                const [serversRes, pueRes, consolidationRes, savingsRes, healthRes] = await Promise.all([
+                    fetch('/api/servers').then(r => r.json()),
+                    fetch('/api/pue').then(r => r.json()),
+                    fetch('/api/consolidation').then(r => r.json()),
+                    fetch('/api/savings').then(r => r.json()),
+                    fetch('/api/health').then(r => r.json())
+                ]);
+
+                if (!serversRes.success) {
+                    throw new Error('Failed to load servers data');
+                }
+
+                dashboardData = {
+                    servers: serversRes.data?.servers || [],
+                    serverSummary: serversRes.data?.summary || {},
+                    pue: pueRes.data || {},
+                    consolidation: consolidationRes.data || {},
+                    savings: savingsRes.data || {},
+                    health: healthRes
+                };
+
+                updateDashboard();
+                hideLoading();
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+                showError(error.message || 'Erro desconhecido ao carregar dados');
+            }
+        }
+
+        // Update dashboard with data
+        function updateDashboard() {
+            const { servers, serverSummary, pue, consolidation, savings, health } = dashboardData;
+
+            // Update data source indicator
+            const dataSourceEl = document.getElementById('dataSource');
+            if (dataSourceEl && health) {
+                dataSourceEl.textContent = health.status || 'live';
+            }
+
+            // Update PUE metrics
+            if (pue && pue.pue) {
+                const pueValueEl = document.getElementById('pueValue');
+                const pueTargetEl = document.getElementById('pueTarget');
+                const pueTrendEl = document.getElementById('pueTrend');
+
+                if (pueValueEl) pueValueEl.textContent = pue.pue.current?.toFixed(2) || '--';
+                if (pueTargetEl) pueTargetEl.textContent = `Meta: ${pue.pue.target?.toFixed(2) || '--'}`;
+                
+                if (pueTrendEl && pue.pue.current && pue.pue.target) {
+                    const improvement = ((pue.pue.current - pue.pue.target) / pue.pue.current * 100).toFixed(0);
+                    pueTrendEl.textContent = improvement;
+                }
+            }
+
+            // Update Consolidation metrics
+            if (consolidation) {
+                const consolidationValueEl = document.getElementById('consolidationValue');
+                const consolidationTargetEl = document.getElementById('consolidationTarget');
+                const consolidationTrendEl = document.getElementById('consolidationTrend');
+
+                if (consolidationValueEl) {
+                    consolidationValueEl.textContent = `${consolidation.servers_current || 100} → ${consolidation.servers_target || 70}`;
+                }
+                if (consolidationTargetEl) {
+                    consolidationTargetEl.textContent = `${consolidation.reduction_percent || 30}% redução`;
+                }
+                if (consolidationTrendEl) {
+                    consolidationTrendEl.textContent = consolidation.reduction_percent || 30;
+                }
+            }
+
+            // Update Energy metrics
+            if (savings && savings.total_potential) {
+                const energyValueEl = document.getElementById('energyValue');
+                const energyTargetEl = document.getElementById('energyTarget');
+                const energyTrendEl = document.getElementById('energyTrend');
+
+                const reductionPercent = savings.total_potential.reduction_percentage || 80;
+                const annualKwh = savings.total_potential.annual_savings_kwh || 0;
+
+                if (energyValueEl) energyValueEl.textContent = `${Math.min(reductionPercent, 100).toFixed(0)}%`;
+                if (energyTargetEl) energyTargetEl.textContent = `${annualKwh.toLocaleString('pt-BR')} kWh/ano`;
+                if (energyTrendEl) energyTrendEl.textContent = Math.min(reductionPercent, 100).toFixed(0);
+            }
+
+            // Update Cost metrics
+            if (savings && savings.total_potential) {
+                const costValueEl = document.getElementById('costValue');
+                const costTargetEl = document.getElementById('costTarget');
+                const costTrendEl = document.getElementById('costTrend');
+
+                const annualSavings = savings.total_potential.annual_savings_brl || 185000;
+                const paybackMonths = savings.total_potential.payback_months || 13;
+
+                if (costValueEl) costValueEl.textContent = `R$ ${annualSavings.toLocaleString('pt-BR')}`;
+                if (costTargetEl) costTargetEl.textContent = `ROI: ${paybackMonths} meses`;
+                if (costTrendEl) costTrendEl.textContent = '100';
+            }
+
+            // Update Server Stats
+            if (servers && servers.length > 0) {
+                const hpServers = servers.filter(s => s.type === 'hp_proliant');
+                const vxrailServers = servers.filter(s => s.type === 'vxrail');
+
+                const hpCount = hpServers.reduce((sum, s) => sum + (s.count || 0), 0);
+                const vxrailCount = vxrailServers.reduce((sum, s) => sum + (s.count || 0), 0);
+
+                const hpCountEl = document.getElementById('hpCount');
+                const vxrailCountEl = document.getElementById('vxrailCount');
+                const totalServersEl = document.getElementById('totalServers');
+
+                if (hpCountEl) hpCountEl.textContent = hpCount;
+                if (vxrailCountEl) vxrailCountEl.textContent = vxrailCount;
+                if (totalServersEl) totalServersEl.textContent = hpCount + vxrailCount;
+            }
+
+            // Update PUE Breakdown
+            if (pue && pue.breakdown) {
+                const serversKwhEl = document.getElementById('serversKwh');
+                const coolingKwhEl = document.getElementById('coolingKwh');
+                const serversProgressEl = document.getElementById('serversProgress');
+                const coolingProgressEl = document.getElementById('coolingProgress');
+
+                const serversKwh = pue.breakdown.servers_kwh || 0;
+                const coolingKwh = pue.breakdown.cooling_kwh || 0;
+                const totalKwh = pue.breakdown.total_kwh || (serversKwh + coolingKwh);
+
+                if (serversKwhEl) serversKwhEl.textContent = `${serversKwh.toFixed(2)} kWh`;
+                if (coolingKwhEl) coolingKwhEl.textContent = `${coolingKwh.toFixed(2)} kWh`;
+
+                if (totalKwh > 0) {
+                    const serversPercent = (serversKwh / totalKwh * 100).toFixed(0);
+                    const coolingPercent = (coolingKwh / totalKwh * 100).toFixed(0);
+
+                    if (serversProgressEl) serversProgressEl.style.width = `${serversPercent}%`;
+                    if (coolingProgressEl) coolingProgressEl.style.width = `${coolingPercent}%`;
+                }
+            }
+
+            // Update Impact Section
+            if (savings && savings.total_potential) {
+                const co2ReductionEl = document.getElementById('co2Reduction');
+                const energySavingsEl = document.getElementById('energySavings');
+                const costSavingsEl = document.getElementById('costSavings');
+
+                const co2Kg = savings.total_potential.co2_reduction_kg || 0;
+                const energyKwh = savings.total_potential.annual_savings_kwh || 0;
+                const costBrl = savings.total_potential.annual_savings_brl || 0;
+
+                if (co2ReductionEl) co2ReductionEl.textContent = `${(co2Kg / 1000).toFixed(1)} ton/ano`;
+                if (energySavingsEl) energySavingsEl.textContent = `${(energyKwh / 1000).toFixed(0)} MWh/ano`;
+                if (costSavingsEl) costSavingsEl.textContent = `R$ ${(costBrl / 1000).toFixed(0)}k/ano`;
+            }
+        }
+
+        // Show/hide loading state
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        // Show error state
+        function showError(message) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Initialize dashboard
+        async function initDashboard() {
+            await fetchDashboardData();
+            
+            // Auto-refresh every 10 seconds
+            setInterval(async () => {
+                try {
+                    await fetchDashboardData();
+                } catch (error) {
+                    console.error('Auto-refresh error:', error);
+                }
+            }, 10000);
+        }
+
+        // Start dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>
