@@ -13,14 +13,14 @@
         <header class="dashboard-header">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="renault-logo">RENAULT</div>
-                    <h1>EcoCode.AI - Sustentabilidade Digital</h1>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="UniBrasil" class="unibrasil-logo" id="unibrasilLogo">
+                    <div class="header-text">
+                        <div class="renault-logo">RENAULT</div>
+                        <h1>EcoDevOps</h1>
+                        <p class="header-subtitle">Sustentabilidade Digital em Infraestruturas de TI</p>
+                    </div>
                 </div>
                 <div class="header-actions">
-                    <a href="sobre.html" class="header-link">
-                        <span class="link-icon">ℹ️</span>
-                        Sobre o Projeto
-                    </a>
                     <div class="current-time" id="currentTime"></div>
                 </div>
             </div>
@@ -31,6 +31,7 @@
             <button class="tab-btn active" data-tab="dashboard">Dashboard Principal</button>
             <button class="tab-btn" data-tab="monitoring">Monitoramento</button>
             <button class="tab-btn" data-tab="analytics">Análise Preditiva</button>
+            <button class="tab-btn" data-tab="about">Sobre o Projeto</button>
             <button class="tab-btn" data-tab="settings">Configurações</button>
         </nav>
 
@@ -41,7 +42,7 @@
                 <div class="metric-card energy-card">
                     <div class="metric-icon">⚡</div>
                     <div class="metric-content">
-                        <h3>Consumo Atual</h3>
+                        <h3>Consumo Atual <span class="info-link" data-tooltip="energy">[?]</span></h3>
                         <div class="metric-value" id="currentConsumption">Loading...</div>
                         <div class="metric-trend positive">Tempo real</div>
                     </div>
@@ -50,7 +51,7 @@
                 <div class="metric-card co2-card">
                     <div class="metric-icon">🌍</div>
                     <div class="metric-content">
-                        <h3>Emissões CO₂/ano</h3>
+                        <h3>Emissões CO₂/ano <span class="info-link" data-tooltip="co2">[?]</span></h3>
                         <div class="metric-value" id="co2Emissions">Loading...</div>
                         <div class="metric-trend positive">kg/ano</div>
                     </div>
@@ -59,7 +60,7 @@
                 <div class="metric-card savings-card">
                     <div class="metric-icon">💰</div>
                     <div class="metric-content">
-                        <h3>Economia Potencial</h3>
+                        <h3>Economia Potencial <span class="info-link" data-tooltip="savings">[?]</span></h3>
                         <div class="metric-value" id="potentialSavings">Loading...</div>
                         <div class="metric-trend neutral">R$/ano</div>
                     </div>
@@ -68,7 +69,7 @@
                 <div class="metric-card trees-card">
                     <div class="metric-icon">🌳</div>
                     <div class="metric-content">
-                        <h3>Equivalente em Árvores</h3>
+                        <h3>Equivalente em Árvores <span class="info-link" data-tooltip="trees">[?]</span></h3>
                         <div class="metric-value" id="treeEquivalent">Loading...</div>
                         <div class="metric-trend neutral">Árvores plantadas</div>
                     </div>
@@ -92,18 +93,18 @@
                 </div>
             </div>
 
-            <!-- Workstation Status -->
+            <!-- Server Status -->
             <div class="status-section">
                 <div class="status-header">
-                    <h2>Status das Workstations</h2>
+                    <h2>Status dos Servidores</h2>
                     <div class="status-summary">
                         <span class="status-item online">
                             <span class="status-dot"></span>
-                            <span id="workstationsOnline">4.200 Online</span>
+                            <span id="serversOnline">115 Online</span>
                         </span>
                         <span class="status-item offline">
                             <span class="status-dot"></span>
-                            <span id="workstationsOffline">1.176 Offline</span>
+                            <span id="serversOffline">5 Offline</span>
                         </span>
                         <span class="status-item eco">
                             <span class="status-dot"></span>
@@ -112,40 +113,40 @@
                     </div>
                 </div>
                 <div class="status-grid">
-                    <div class="sector-status" data-sector="administrativo">
-                        <h4>Administrativo</h4>
+                    <div class="sector-status" data-sector="datacenter-principal">
+                        <h4>Data Center Principal</h4>
                         <div class="status-bar">
-                            <div class="status-fill" style="width: 75%"></div>
+                            <div class="status-fill" style="width: 96%"></div>
                         </div>
-                        <div class="status-details">900/1200 ativas</div>
+                        <div class="status-details">43/45 ativos</div>
                     </div>
-                    <div class="sector-status" data-sector="engenharia">
-                        <h4>Engenharia</h4>
+                    <div class="sector-status" data-sector="datacenter-backup">
+                        <h4>Data Center Backup</h4>
                         <div class="status-bar">
-                            <div class="status-fill" style="width: 85%"></div>
+                            <div class="status-fill" style="width: 92%"></div>
                         </div>
-                        <div class="status-details">680/800 ativas</div>
+                        <div class="status-details">23/25 ativos</div>
                     </div>
                     <div class="sector-status" data-sector="producao">
-                        <h4>Produção</h4>
+                        <h4>Servidores Produção</h4>
                         <div class="status-bar">
-                            <div class="status-fill" style="width: 90%"></div>
+                            <div class="status-fill" style="width: 100%"></div>
                         </div>
-                        <div class="status-details">1350/1500 ativas</div>
+                        <div class="status-details">30/30 ativos</div>
                     </div>
-                    <div class="sector-status" data-sector="vendas">
-                        <h4>Vendas</h4>
+                    <div class="sector-status" data-sector="desenvolvimento">
+                        <h4>Desenvolvimento</h4>
+                        <div class="status-bar">
+                            <div class="status-fill" style="width: 87%"></div>
+                        </div>
+                        <div class="status-details">13/15 ativos</div>
+                    </div>
+                    <div class="sector-status" data-sector="rede">
+                        <h4>Infraestrutura de Rede</h4>
                         <div class="status-bar">
                             <div class="status-fill" style="width: 80%"></div>
                         </div>
-                        <div class="status-details">720/900 ativas</div>
-                    </div>
-                    <div class="sector-status" data-sector="suporte">
-                        <h4>Suporte</h4>
-                        <div class="status-bar">
-                            <div class="status-fill" style="width: 55%"></div>
-                        </div>
-                        <div class="status-details">550/976 ativas</div>
+                        <div class="status-details">4/5 ativos</div>
                     </div>
                 </div>
             </div>
@@ -192,10 +193,10 @@
                     <div class="alert-item warning">
                         <div class="alert-icon">⚠️</div>
                         <div class="alert-content">
-                            <div class="alert-title">Workstations ociosas detectadas</div>
-                            <div class="alert-description">23 máquinas no setor Administrativo sem atividade há mais de 2h</div>
+                            <div class="alert-title">Servidores com baixa utilização detectados</div>
+                            <div class="alert-description">8 servidores no Data Center Backup com carga média abaixo de 20% nas últimas 48h</div>
                         </div>
-                        <button class="btn btn--sm btn--primary">Implementar Economia</button>
+                        <button class="btn btn--sm btn--primary">Consolidar Cargas</button>
                     </div>
                     <div class="alert-item info">
                         <div class="alert-icon">💡</div>
@@ -230,19 +231,19 @@
                             <span class="recommendation-type">Automática</span>
                             <span class="recommendation-status implementable">Implementável</span>
                         </div>
-                        <h4>Desligar workstations ociosas após 30min</h4>
+                        <h4>Consolidar servidores com baixa utilização</h4>
                         <div class="recommendation-metrics">
                             <div class="metric">
                                 <span class="metric-label">Economia:</span>
-                                <span class="metric-value">450 kWh/dia</span>
+                                <span class="metric-value">180 kWh/dia</span>
                             </div>
                             <div class="metric">
                                 <span class="metric-label">Valor:</span>
-                                <span class="metric-value">R$ 270/dia</span>
+                                <span class="metric-value">R$ 108/dia</span>
                             </div>
                             <div class="metric">
                                 <span class="metric-label">CO₂:</span>
-                                <span class="metric-value">-37 kg/dia</span>
+                                <span class="metric-value">-15 kg/dia</span>
                             </div>
                         </div>
                         <button class="btn btn--primary btn--full-width">Implementar Agora</button>
@@ -292,6 +293,294 @@
                             </div>
                         </div>
                         <button class="btn btn--primary btn--full-width">Ativar Otimização</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sobre o Projeto Tab -->
+        <div class="tab-content" id="about-tab">
+            <div class="about-header">
+                <h2>🌱 EcoDevOps - Sustentabilidade Digital Inteligente</h2>
+                <p class="about-subtitle">Solução inovadora para monitoramento e redução da pegada de carbono em infraestruturas de TI</p>
+            </div>
+
+            <!-- Contexto e Problema -->
+            <div class="about-section">
+                <h3>🎯 O Desafio</h3>
+                <div class="challenge-card">
+                    <p>O crescimento das infraestruturas de TI traz ganhos de performance, mas também aumentos silenciosos no consumo de energia e na pegada de carbono. A <strong>Renault</strong> identificou a necessidade de uma solução que permita:</p>
+                    <ul>
+                        <li>Rastrear em tempo real a pegada de carbono da infraestrutura de TI</li>
+                        <li>Identificar automaticamente recursos ociosos e desperdícios</li>
+                        <li>Gerar recomendações inteligentes de otimização</li>
+                        <li>Fornecer visibilidade executiva para tomada de decisão</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Nossa Solução -->
+            <div class="about-section">
+                <h3>🚀 Nossa Solução</h3>
+                <div class="solution-grid">
+                    <div class="solution-card">
+                        <div class="solution-icon">📊</div>
+                        <h4>Monitoramento em Tempo Real</h4>
+                        <p>Dashboard que acompanha consumo energético, emissões de CO₂ e status de 120 servidores físicos e 30 máquinas virtuais</p>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">🤖</div>
+                        <h4>IA Preditiva</h4>
+                        <p>Algoritmos de machine learning que identificam padrões de desperdício e geram recomendações automáticas de economia</p>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">⚡</div>
+                        <h4>Automação Inteligente</h4>
+                        <p>Detecta e desliga automaticamente recursos ociosos, baseado em padrões de uso e horários otimizados</p>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">🌍</div>
+                        <h4>Impacto Ambiental</h4>
+                        <p>Traduz métricas técnicas em impacto real: CO₂ evitado, árvores equivalentes, economia financeira</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validação Técnica -->
+            <div class="about-section">
+                <h3>🔬 Validação Técnica - Laboratório UniBrasil</h3>
+                <div class="validation-card">
+                    <div class="validation-header">
+                        <span class="validation-badge">✅ Prototipado e Validado</span>
+                    </div>
+                    <p>Realizamos estudo de laboratório na <strong>UniBrasil</strong> utilizando um servidor <strong>HP ProLiant DL380 G8</strong> para validar a viabilidade técnica da solução:</p>
+                    <div class="validation-details">
+                        <div class="validation-item">
+                            <strong>🖥️ Equipamento:</strong> HP ProLiant DL380 G8 (servidor real de produção)
+                        </div>
+                        <div class="validation-item">
+                            <strong>🔌 Interface:</strong> ILO 4 (Integrated Lights-Out 4) - Sistema de gestão remota da HP
+                        </div>
+                        <div class="validation-item">
+                            <strong>📈 Métricas Coletadas:</strong> Consumo energético em watts, temperatura, utilização de CPU/RAM, status de componentes
+                        </div>
+                        <div class="validation-item">
+                            <strong>✅ Resultado:</strong> Comprovamos que é possível extrair métricas precisas de consumo em tempo real via protocolos SNMP e APIs REST
+                        </div>
+                    </div>
+                    <p class="validation-conclusion">Este protótipo demonstra que a solução pode ser escalada para toda a infraestrutura da Renault, integrando-se com os sistemas de gestão existentes (ILO, iDRAC, vCenter, etc).</p>
+                </div>
+            </div>
+
+            <!-- Metodologia de Cálculo -->
+            <div class="about-section">
+                <h3>🧮 Metodologia de Cálculo</h3>
+                <div class="methodology-grid">
+                    <div class="methodology-card">
+                        <h4>⚡ Consumo Energético</h4>
+                        <div class="formula">
+                            <code>Consumo (kWh) = Potência (W) × Tempo (h) ÷ 1000</code>
+                        </div>
+                        <p><strong>Servidor HP DL380:</strong> 320W (média), 500W (pico)</p>
+                        <p><strong>VxRail:</strong> 180W por nó</p>
+                        <p><strong>Servidor virtualizado:</strong> 150W (média)</p>
+                    </div>
+                    
+                    <div class="methodology-card">
+                        <h4>🌍 Emissões de CO₂</h4>
+                        <div class="formula">
+                            <code>CO₂ (kg) = Consumo (kWh) × Fator de Emissão</code>
+                        </div>
+                        <p><strong>Fator Brasil:</strong> 0,0817 kg CO₂/kWh (matriz energética brasileira 2024 - EPE)</p>
+                        <p><strong>Fonte:</strong> Empresa de Pesquisa Energética (EPE) - Balanço Energético Nacional</p>
+                        <p><small>A matriz brasileira é relativamente limpa devido às hidrelétricas (~60% renovável)</small></p>
+                    </div>
+                    
+                    <div class="methodology-card">
+                        <h4>🌳 Equivalente em Árvores</h4>
+                        <div class="formula">
+                            <code>Árvores = CO₂ (kg/ano) ÷ 22 kg/árvore/ano</code>
+                        </div>
+                        <p><strong>Sequestro médio:</strong> 22 kg CO₂/árvore/ano</p>
+                        <p><strong>Referência:</strong> Árvore adulta de médio porte em clima tropical</p>
+                        <p><small>Representa o número de árvores necessárias para compensar as emissões</small></p>
+                    </div>
+                    
+                    <div class="methodology-card">
+                        <h4>💰 Economia Financeira</h4>
+                        <div class="formula">
+                            <code>Economia (R$) = Redução (kWh) × Tarifa (R$/kWh)</code>
+                        </div>
+                        <p><strong>Tarifa industrial:</strong> R$ 0,60/kWh (média Copel 2024)</p>
+                        <p><strong>Potencial de redução:</strong> 15-30% com otimizações automáticas</p>
+                        <p><small>Baseado em estudos de eficiência energética em data centers</small></p>
+                    </div>
+                </div>
+                
+                <div class="methodology-example">
+                    <h4>📊 Exemplo Prático - Infraestrutura Renault</h4>
+                    <div class="example-calc">
+                        <p><strong>Cenário:</strong> 120 servidores físicos + 30 virtualizados operando 24h/dia</p>
+                        <p><strong>Consumo diário:</strong> (120 × 320W × 24h + 30 × 150W × 24h) ÷ 1000 = 1.030 kWh/dia</p>
+                        <p><strong>CO₂ anual:</strong> 1.030 × 365 × 0,0817 = 30.714 kg/ano</p>
+                        <p><strong>Árvores equivalentes:</strong> 30.714 ÷ 22 = 1.396 árvores</p>
+                        <p><strong>Custo anual:</strong> 1.030 × 365 × R$ 0,60 = R$ 225.390/ano</p>
+                        <p class="highlight"><strong>💡 Economia potencial (20%):</strong> R$ 45.078/ano e 6.143 kg CO₂ evitados</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relação de Consumo -->
+            <div class="about-section">
+                <h3>📄 Relação de Consumo de Carbono</h3>
+                <div class="consumption-card">
+                    <p>Nossa solução considera a <strong>relação completa de consumo de carbono</strong> em infraestruturas de TI:</p>
+                    <div class="consumption-categories">
+                        <div class="consumption-item">
+                            <strong>🖥️ Equipamentos de TI:</strong>
+                            <ul>
+                                <li>Servidores físicos (120 unidades)</li>
+                                <li>Infraestrutura virtualizada (30 VMs críticas)</li>
+                                <li>Equipamentos de rede (switches, roteadores, firewalls)</li>
+                                <li>Storage e backup</li>
+                            </ul>
+                        </div>
+                        <div class="consumption-item">
+                            <strong>❄️ Infraestrutura de Suporte:</strong>
+                            <ul>
+                                <li>Sistemas de refrigeração (ar-condicionado de precisão)</li>
+                                <li>UPS e sistemas de energia (conversão e redundância)</li>
+                                <li>Iluminação de data centers</li>
+                            </ul>
+                        </div>
+                        <div class="consumption-item">
+                            <strong>☁️ Serviços Cloud:</strong>
+                            <ul>
+                                <li>Consumo indireto de VMs e containers na nuvem</li>
+                                <li>Transferência de dados (rede)</li>
+                                <li>Armazenamento cloud</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="consumption-note"><strong>PUE (Power Usage Effectiveness):</strong> Consideramos um PUE de 1.8 para data centers tradicionais, significando que para cada 1 kWh consumido em TI, 0.8 kWh adicional é usado em refrigeração e infraestrutura.</p>
+                </div>
+            </div>
+
+            <!-- Nossa Equipe -->
+            <div class="about-section">
+                <h3>👥 Nossa Equipe Multidisciplinar</h3>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-role mentor">Mentor</div>
+                        <h4>Prof. Mozart Hasse</h4>
+                        <p class="member-title">Engenharia de Software</p>
+                        <p>Arquitetura de sistemas e metodologias ágeis</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role mentor">Mentor</div>
+                        <h4>Prof. Renan Zunta Raia</h4>
+                        <p class="member-title">Engenharia Ambiental</p>
+                        <p>Metodologias de sustentabilidade e cálculo de pegada de carbono</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role mentor">Mentor</div>
+                        <h4>Prof. Lauro Katsumi</h4>
+                        <p class="member-title">Engenharia Elétrica</p>
+                        <p>Sistemas de energia e eficiência energética</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role student">Desenvolvedor</div>
+                        <h4>Leonardo Bora</h4>
+                        <p class="member-title">Engenharia de Software</p>
+                        <p>Tech Lead - Arquitetura, CI/CD, coordenação técnica</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role student">Desenvolvedor</div>
+                        <h4>Matheus Leite</h4>
+                        <p class="member-title">Engenharia de Software</p>
+                        <p>Backend, APIs e integração de sistemas</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role student">Desenvolvedor</div>
+                        <h4>Sthefany Santos</h4>
+                        <p class="member-title">Engenharia de Software</p>
+                        <p>Frontend, UX/UI e dashboards interativos</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role student">Especialista</div>
+                        <h4>Gabriel Barvik</h4>
+                        <p class="member-title">Engenharia Elétrica</p>
+                        <p>Sistemas energéticos e modelagem de consumo</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role student">Especialista</div>
+                        <h4>Meridiana Bombardelli</h4>
+                        <p class="member-title">Engenharia Ambiental</p>
+                        <p>Cálculos de pegada de carbono e compliance ambiental</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-role student">Especialista</div>
+                        <h4>Suelen Rodrigues</h4>
+                        <p class="member-title">Engenharia Ambiental</p>
+                        <p>Validação de métricas e relatórios de impacto ambiental</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comprometimento com ODS -->
+            <div class="about-section">
+                <h3>🎯 Comprometimento com os ODS da ONU</h3>
+                <div class="ods-grid">
+                    <div class="ods-card ods-7">
+                        <div class="ods-number">7</div>
+                        <h4>Energia Limpa e Acessível</h4>
+                        <p>Otimizamos o uso de energia, reduzindo desperdício e promovendo eficiência energética</p>
+                    </div>
+                    <div class="ods-card ods-9">
+                        <div class="ods-number">9</div>
+                        <h4>Indústria, Inovação e Infraestrutura</h4>
+                        <p>Inovação em gestão de TI com soluções de monitoramento inteligente</p>
+                    </div>
+                    <div class="ods-card ods-12">
+                        <div class="ods-number">12</div>
+                        <h4>Consumo e Produção Responsáveis</h4>
+                        <p>Promovemos o uso consciente de recursos tecnológicos</p>
+                    </div>
+                    <div class="ods-card ods-13">
+                        <div class="ods-number">13</div>
+                        <h4>Ação Contra a Mudança Global do Clima</h4>
+                        <p>Redução direta de emissões de CO₂ da infraestrutura de TI</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Roadmap Futuro -->
+            <div class="about-section">
+                <h3>🗺️ Próximos Passos</h3>
+                <div class="roadmap-card">
+                    <div class="roadmap-item">
+                        <span class="roadmap-phase">Fase 1 - MVP</span>
+                        <p>Dashboard funcional com dados sintéticos e validação de conceito (✅ Concluído)</p>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-phase">Fase 2 - Integração</span>
+                        <p>Conexão com sistemas reais via SNMP, ILO, iDRAC e APIs</p>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-phase">Fase 3 - IA Avançada</span>
+                        <p>Machine Learning para previsões mais precisas e recomendações personalizadas</p>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-phase">Fase 4 - Automação</span>
+                        <p>Implementação de ações automáticas de economia via orquestração</p>
                     </div>
                 </div>
             </div>
@@ -390,6 +679,23 @@
             </div>
         </div>
     </div>
+
+    <!-- Tooltip Modal -->
+    <div class="tooltip-modal" id="tooltipModal">
+        <div class="tooltip-content">
+            <button class="tooltip-close" id="tooltipClose">×</button>
+            <div id="tooltipBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load UniBrasil logo
+        const unibrasilLogo = document.getElementById('unibrasilLogo');
+        if (unibrasilLogo) {
+            // Placeholder base64 - replace with actual logo
+            unibrasilLogo.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iODAiIGZpbGw9IiNmZmYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzAwNTY5RCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii0xMCI+VW5pQnJhc2lsPC90ZXh0Pjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMwMDU2OUQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIxMCI+Q2VudHJvIFVuaXZlcnNpdMOhcmlvPC90ZXh0Pjwvc3ZnPg==';
+        }
+    </script>
 
     <script src="static/js/metrics-calculator.js"></script>
     <script src="static/js/app.js"></script>
