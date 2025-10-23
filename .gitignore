@@ -262,3 +262,5 @@ safety-report.json
 pip-audit-report.json
 security-reports/
 *.sarif_deploy/
+# Vendor libraries (download separately)
+static/js/vendor/*.js

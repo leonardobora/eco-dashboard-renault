@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title or 'EcoTI Dashboard - Renault Sustentabilidade Digital' }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chart.umd.min.js') }}"></script>
 </head>
 <body>
     <div class="dashboard-container">
