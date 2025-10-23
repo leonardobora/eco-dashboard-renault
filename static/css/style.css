@@ -755,10 +755,11 @@ select.form-control {
 
 /* Header Styles */
 .dashboard-header {
-  background: linear-gradient(135deg, var(--renault-black) 0%, var(--renault-dark-gray) 100%);
-  color: var(--color-white);
+  background: var(--color-white);
+  color: var(--color-text);
   padding: var(--space-16) var(--space-24);
   box-shadow: var(--shadow-md);
+  border-bottom: 3px solid var(--renault-yellow);
 }
 
 .header-content {
@@ -773,6 +774,8 @@ select.form-control {
   display: flex;
   align-items: center;
   gap: var(--space-16);
+  justify-content: center;
+  flex: 1;
 }
 
 .unibrasil-logo {
@@ -785,6 +788,8 @@ select.form-control {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  align-items: center;
+  text-align: center;
 }
 
 .header-text .renault-logo {
@@ -795,20 +800,22 @@ select.form-control {
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
   letter-spacing: 2px;
-  align-self: flex-start;
+  align-self: center;
 }
 
 .dashboard-header h1 {
-  color: var(--color-white);
+  color: var(--color-text);
   font-size: var(--font-size-2xl);
   margin: 0;
   line-height: 1.2;
+  text-align: center;
 }
 
 .header-subtitle {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   margin: 0;
+  text-align: center;
 }
 
 .header-actions {
@@ -821,16 +828,17 @@ select.form-control {
   display: flex;
   align-items: center;
   gap: var(--space-8);
-  color: var(--renault-yellow);
+  color: var(--color-text);
   text-decoration: none;
   padding: var(--space-8) var(--space-12);
   border-radius: var(--radius-base);
   transition: all 0.3s ease;
   font-weight: var(--font-weight-medium);
+  background-color: var(--renault-yellow);
 }
 
 .header-link:hover {
-  background-color: rgba(255, 203, 0, 0.1);
+  background-color: var(--renault-black);
   color: var(--color-white);
   transform: translateY(-1px);
 }
@@ -842,7 +850,8 @@ select.form-control {
 .current-time {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-lg);
-  color: var(--renault-yellow);
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
 }
 
 /* Tab Navigation */

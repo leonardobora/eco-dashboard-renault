@@ -174,15 +174,15 @@ function updateCurrentTime() {
   const timeElement = document.getElementById('currentTime');
   if (timeElement) {
     const now = new Date();
-    const options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    };
-    timeElement.textContent = now.toLocaleDateString('pt-BR', options);
+    
+    // Format: HH:mm DD/MM/YY
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = String(now.getFullYear()).slice(-2);
+    
+    timeElement.textContent = `${hours}:${minutes} ${day}/${month}/${year}`;
   }
 }
 
@@ -355,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Initialize components
   initializeTabNavigation();
+  initializeTooltips();
   updateCurrentTime();
   initializeCharts();
   
@@ -453,6 +454,150 @@ function formatCurrency(num) {
     style: 'currency',
     currency: 'BRL'
   }).format(num);
+}
+
+// Tooltip functionality
+function initializeTooltips() {
+  const tooltipModal = document.getElementById('tooltipModal');
+  const tooltipClose = document.getElementById('tooltipClose');
+  const tooltipBody = document.getElementById('tooltipBody');
+  const infoLinks = document.querySelectorAll('.info-link');
+  
+  // Tooltip content
+  const tooltipContent = {
+    energy: {
+      title: '⚡ Consumo Energético Atual',
+      content: `
+        <h3>Como calculamos?</h3>
+        <div class="formula-box">
+          <code>Consumo (kWh) = (Servidores × Potência × Utilização + Workstations × Potência × Fator de Uso) ÷ 1000</code>
+        </div>
+        <p><strong>Componentes do cálculo:</strong></p>
+        <ul>
+          <li>90 Servidores HP ProLiant DL380 Gen10: 400W cada (35% utilização média)</li>
+          <li>10 VxRail E560: 800W cada (65% utilização média)</li>
+          <li>PUE (Power Usage Effectiveness): 2.0 - inclui refrigeração, UPS e infraestrutura</li>
+        </ul>
+        <div class="example-highlight">
+          <strong>📊 Exemplo de cálculo em tempo real:</strong>
+          <p>Consumo servidores HP: 90 × 400W × 0.35 = 12,6 kW</p>
+          <p>Consumo VxRail: 10 × 800W × 0.65 = 5,2 kW</p>
+          <p>Total IT: 17,8 kW</p>
+          <p>Total Datacenter (com PUE 2.0): 17,8 × 2.0 = <strong>35,6 kW</strong></p>
+        </div>
+        <p><em>O valor varia conforme a hora do dia, refletindo padrões reais de utilização.</em></p>
+      `
+    },
+    co2: {
+      title: '🌍 Emissões de CO₂',
+      content: `
+        <h3>Como calculamos?</h3>
+        <div class="formula-box">
+          <code>CO₂ (kg/ano) = Consumo Anual (kWh) × Fator de Emissão</code>
+        </div>
+        <p><strong>Parâmetros utilizados:</strong></p>
+        <ul>
+          <li>Fator de emissão: 0,0817 kg CO₂/kWh (matriz energética brasileira 2024)</li>
+          <li>Fonte: Empresa de Pesquisa Energética (EPE) - Balanço Energético Nacional</li>
+          <li>Consumo anual: Consumo atual × 24 horas × 365 dias</li>
+        </ul>
+        <div class="example-highlight">
+          <strong>📊 Exemplo de cálculo:</strong>
+          <p>Se consumo atual = 874 kWh:</p>
+          <p>Consumo anual: 874 × 24 × 365 = 7.656.240 kWh/ano</p>
+          <p>CO₂ emitido: 7.656.240 × 0,0817 = <strong>625.515 kg/ano</strong></p>
+        </div>
+        <p><em>A matriz energética brasileira é relativamente limpa devido às hidrelétricas (~60% renovável).</em></p>
+      `
+    },
+    savings: {
+      title: '💰 Economia Potencial',
+      content: `
+        <h3>Como calculamos?</h3>
+        <div class="formula-box">
+          <code>Economia (R$/ano) = Redução de Consumo (kWh) × Tarifa (R$/kWh)</code>
+        </div>
+        <p><strong>Fontes de economia identificadas:</strong></p>
+        <ul>
+          <li>Consolidação de servidores com baixa utilização</li>
+          <li>Otimização do PUE (de 2.0 para 1.5) - melhorias em refrigeração</li>
+          <li>Desligamento automático de recursos ociosos</li>
+          <li>Migração de cargas para horários de menor demanda</li>
+        </ul>
+        <div class="example-highlight">
+          <strong>📊 Potencial de otimização:</strong>
+          <p>Redução esperada no consumo: 15-30%</p>
+          <p>Tarifa industrial média: R$ 0,60/kWh (Copel 2024)</p>
+          <p>Exemplo: 20% de redução em 874 kWh = 174,8 kWh economizados/dia</p>
+          <p>Economia anual: 174,8 × 365 × R$ 0,60 = <strong>R$ 38.276/ano</strong></p>
+        </div>
+        <p><em>Baseado em estudos de eficiência energética em data centers e melhores práticas do setor.</em></p>
+      `
+    },
+    trees: {
+      title: '🌳 Equivalente em Árvores',
+      content: `
+        <h3>Como calculamos?</h3>
+        <div class="formula-box">
+          <code>Árvores = Emissões CO₂ (kg/ano) ÷ 22 kg/árvore/ano</code>
+        </div>
+        <p><strong>Referência científica:</strong></p>
+        <ul>
+          <li>Sequestro médio: 22 kg CO₂/árvore/ano</li>
+          <li>Baseado em árvore adulta de médio porte em clima tropical</li>
+          <li>Considera espécies nativas brasileiras típicas</li>
+          <li>Período de maturidade: árvore com 10+ anos</li>
+        </ul>
+        <div class="example-highlight">
+          <strong>📊 O que isso significa?</strong>
+          <p>Se emitimos 625.515 kg CO₂/ano:</p>
+          <p>Árvores necessárias: 625.515 ÷ 22 = <strong>28.432 árvores</strong></p>
+          <p>Isso representa quantas árvores precisariam ser plantadas e mantidas por um ano inteiro para compensar nossas emissões.</p>
+        </div>
+        <p><em>Este indicador ajuda a visualizar o impacto ambiental em termos tangíveis e compreensíveis.</em></p>
+      `
+    }
+  };
+  
+  // Add click handlers to info links
+  infoLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tooltipType = link.getAttribute('data-tooltip');
+      const content = tooltipContent[tooltipType];
+      
+      if (content) {
+        tooltipBody.innerHTML = `
+          <h3>${content.title}</h3>
+          ${content.content}
+        `;
+        tooltipModal.classList.add('active');
+      }
+    });
+  });
+  
+  // Close modal on close button click
+  if (tooltipClose) {
+    tooltipClose.addEventListener('click', () => {
+      tooltipModal.classList.remove('active');
+    });
+  }
+  
+  // Close modal on background click
+  if (tooltipModal) {
+    tooltipModal.addEventListener('click', (e) => {
+      if (e.target === tooltipModal) {
+        tooltipModal.classList.remove('active');
+      }
+    });
+  }
+  
+  // Close modal on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && tooltipModal.classList.contains('active')) {
+      tooltipModal.classList.remove('active');
+    }
+  });
 }
 
 // Error handling
