@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title or 'EcoTI Dashboard - Renault Sustentabilidade Digital' }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chart.umd.min.js') }}"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -14,7 +14,7 @@
             <div class="header-content">
                 <div class="logo-section">
                     <div class="renault-logo">RENAULT</div>
-                    <h1>EcoCode.AI - Sustentabilidade Digital</h1>
+                    <h1>EcoCode.AI</h1>
                 </div>
                 <div class="header-actions">
                     <a href="/sobre" class="header-link">
@@ -41,7 +41,7 @@
                 <div class="metric-card energy-card">
                     <div class="metric-icon">⚡</div>
                     <div class="metric-content">
-                        <h3>Consumo Atual</h3>
+                        <h3>Consumo Atual <span class="info-link" data-tooltip="energy">[?]</span></h3>
                         <div class="metric-value" id="currentConsumption">Loading...</div>
                         <div class="metric-trend positive">Tempo real</div>
                     </div>
@@ -50,7 +50,7 @@
                 <div class="metric-card co2-card">
                     <div class="metric-icon">🌍</div>
                     <div class="metric-content">
-                        <h3>Emissões CO₂/ano</h3>
+                        <h3>Emissões CO₂/ano <span class="info-link" data-tooltip="co2">[?]</span></h3>
                         <div class="metric-value" id="co2Emissions">Loading...</div>
                         <div class="metric-trend positive">kg/ano</div>
                     </div>
@@ -59,7 +59,7 @@
                 <div class="metric-card savings-card">
                     <div class="metric-icon">💰</div>
                     <div class="metric-content">
-                        <h3>Economia Potencial</h3>
+                        <h3>Economia Potencial <span class="info-link" data-tooltip="savings">[?]</span></h3>
                         <div class="metric-value" id="potentialSavings">Loading...</div>
                         <div class="metric-trend neutral">R$/ano</div>
                     </div>
@@ -68,7 +68,7 @@
                 <div class="metric-card trees-card">
                     <div class="metric-icon">🌳</div>
                     <div class="metric-content">
-                        <h3>Equivalente em Árvores</h3>
+                        <h3>Equivalente em Árvores <span class="info-link" data-tooltip="trees">[?]</span></h3>
                         <div class="metric-value" id="treeEquivalent">Loading...</div>
                         <div class="metric-trend neutral">Árvores plantadas</div>
                     </div>
@@ -388,6 +388,14 @@
                 <button class="btn btn--primary">Salvar Configurações</button>
                 <button class="btn btn--outline">Restaurar Padrões</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Tooltip Modal -->
+    <div class="tooltip-modal" id="tooltipModal">
+        <div class="tooltip-content">
+            <button class="tooltip-close" id="tooltipClose">×</button>
+            <div id="tooltipBody"></div>
         </div>
     </div>
 

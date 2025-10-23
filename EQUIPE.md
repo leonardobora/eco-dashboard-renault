@@ -8,6 +8,35 @@ Somos uma equipe multidisciplinar focada em **Sustentabilidade Digital** e **Tec
 
 ---
 
+## 👥 **EQUIPE DO PROJETO**
+
+### 🎓 **Professores e Mentores**
+
+- **Prof. Mozart Hasse** - Engenharia de Software
+- **Prof. Renan Zunta Raia** - Engenharia Ambiental
+- **Prof. Lauro Katsumi** - Engenharia Elétrica
+- **Prof. Wilson Parisotto** - Engenharia de Produção
+
+### 🎯 **Coordenação**
+
+- **Orlei Pombeiro** - Coordenador do Curso de Engenharia de Software
+
+### 💻 **Desenvolvedores**
+
+- **Leonardo Bora** - Engenharia de Software (Tech Lead - Arquitetura, CI/CD, coordenação técnica)
+- **Matheus Leite** - Engenharia de Software (Backend, APIs e integração de sistemas)
+- **Sthefany Santos** - Engenharia de Software (Frontend, UX/UI e dashboards interativos)
+- **Daniel Nhemihes** - Engenharia de Software (Contribuiu no início do projeto)
+
+### 🔬 **Especialistas**
+
+- **Gabriel Barvik** - Engenharia Elétrica (Sistemas energéticos e modelagem de consumo)
+- **Meridiana Bombardelli** - Engenharia Ambiental (Cálculos de pegada de carbono e compliance ambiental)
+- **Suelen Rodrigues** - Engenharia Ambiental (Validação de métricas e relatórios de impacto ambiental)
+- **Kamille Gasparin** - Engenharia de Produção
+
+---
+
 ## 👥 **OPÇÕES DE NOMES PARA A EQUIPE**
 
 ### 🌱 **Categoria: Sustentabilidade + Tecnologia**
