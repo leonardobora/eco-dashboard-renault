@@ -2019,6 +2019,11 @@ select.form-control {
   color: var(--color-text);
 }
 
+.member-role.coordinator {
+  background-color: var(--renault-yellow);
+  color: var(--renault-black);
+}
+
 .member-role.student {
   background-color: var(--color-bg-1);
   color: var(--color-text);
